@@ -16,7 +16,7 @@ namespace MusicDownloader_New.Library
     public class Music
     {
         List<int> version = new List<int> { 1, 0, 0 };
-        const string ApiUrl = "http://116.85.33.135:3000/";
+        
         public Setting setting;
         public List<DownloadList> downloadlist = new List<DownloadList>();
         string cookie = "";
@@ -48,8 +48,8 @@ namespace MusicDownloader_New.Library
                 needupdate = true;
             }
             if (needupdate)
-            { 
-                
+            {
+
             }
         }
 
@@ -64,7 +64,7 @@ namespace MusicDownloader_New.Library
         }
 
         /// <summary>
-        /// 线程调用的搜索
+        /// 搜索方法
         /// </summary>
         public List<MusicInfo> Search(string Key)
         {
@@ -180,6 +180,10 @@ namespace MusicDownloader_New.Library
             return ret;
         }
 
+        /// <summary>
+        /// 下载方法
+        /// </summary>
+        /// <param name="dl"></param>
         public void Download(List<DownloadList> dl)
         {
             string ids = "";
@@ -207,6 +211,11 @@ namespace MusicDownloader_New.Library
             }
         }
 
+        /// <summary>
+        /// 文件名检查
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         string NameCheck(string name)
         {
             string re = name.Replace("*", " ");
@@ -222,6 +231,9 @@ namespace MusicDownloader_New.Library
             return re;
         }
 
+        /// <summary>
+        /// 下载线程
+        /// </summary>
         private void _Download()
         {
             while (downloadlist.Count != 0)
@@ -323,6 +335,106 @@ namespace MusicDownloader_New.Library
                 downloadlist.Remove(downloadlist[0]);
                 UpdateDownloadPage();
             }
+        }
+
+        /// <summary>
+        ///解析歌单，为了稳定每次请求200歌曲信息，所以解析歌单的方法分为两部分，这个方法根据歌曲数量分解请求
+        /// </summary>
+        public List<MusicInfo> GetMusicList(string Id)
+        {
+            WebClient wc = new WebClient();
+            Musiclist.Root musiclistjson = new Musiclist.Root();
+            musiclistjson = JsonConvert.DeserializeObject<Musiclist.Root>(GetHTML(ApiUrl + "playlist/detail?id=" + Id));
+            string ids = "";
+            for (int i = 0; i < musiclistjson.playlist.trackIds.Count; i++)
+            {
+                ids += musiclistjson.playlist.trackIds[i].id.ToString() + ",";
+            }
+            ids = ids.Substring(0, ids.Length - 1);
+
+            if (musiclistjson.playlist.trackIds.Count > 200)
+            {
+                string[] _id = ids.Split(',');
+
+                int times = musiclistjson.playlist.trackIds.Count / 200;
+                int remainder = musiclistjson.playlist.trackIds.Count % 200;
+                if (remainder != 0)
+                {
+                    times++;
+                }
+                List<MusicInfo> re = new List<MusicInfo>();
+                for (int i = 0; i < times; i++)
+                {
+                    string _ids = "";
+                    if (i != times - 1)
+                    {
+                        for (int x = 0; x < 200; x++)
+                        {
+                            _ids += _id[i * 200 + x] + ",";
+                        }
+                    }
+                    else
+                    {
+                        for (int x = 0; x < remainder; x++)
+                        {
+                            _ids += _id[i * 200 + x] + ",";
+                        }
+                    }
+                    re.AddRange(_GetMusicList(_ids.Substring(0, _ids.Length - 1)));
+                }
+                return re;
+            }
+            else
+            {
+                return _GetMusicList(ids);
+            }
+        }
+
+        /// <summary>
+        /// 解析歌单的内部方法
+        /// </summary>
+        /// <param name="ids"></param>
+        /// <returns></returns>
+        private List<MusicInfo> _GetMusicList(string ids)
+        {
+            List<Json.MusicInfo> ret = new List<Json.MusicInfo>();
+            string _u = ApiUrl + "song/detail?ids=" + ids;
+            string j = GetHTML(_u);
+            Json.MusicDetails.Root mdr = JsonConvert.DeserializeObject<Json.MusicDetails.Root>(j);
+            string u = ApiUrl + "song/url?id=" + ids + "&br=" + setting.DownloadQuality;
+            Json.GetUrl.Root urls = JsonConvert.DeserializeObject<Json.GetUrl.Root>(GetHTML(u));
+            for (int i = 0; i < mdr.songs.Count; i++)
+            {
+                string singer = "";
+                List<string> singerid = new List<string>();
+                string _url = "";
+
+                for (int x = 0; x < mdr.songs[i].ar.Count; x++)
+                {
+                    singer += mdr.songs[i].ar[x].name + "、";
+                    singerid.Add(mdr.songs[i].ar[x].id.ToString());
+                }
+
+                for (int x = 0; x < urls.data.Count; x++)
+                {
+                    if (urls.data[x].id == mdr.songs[i].id)
+                    {
+                        _url = urls.data[x].url;
+                    }
+                }
+
+                MusicInfo mi = new MusicInfo()
+                {
+                    Album = mdr.songs[i].al.name,
+                    Id = mdr.songs[i].id,
+                    LrcUrl = ApiUrl + "lyric?id=" + mdr.songs[i].id,
+                    PicUrl = mdr.songs[i].al.picUrl,
+                    Singer = singer.Substring(0, singer.Length - 1),
+                    Title = mdr.songs[i].name
+                };
+                ret.Add(mi);
+            }
+            return ret;
         }
     }
 }

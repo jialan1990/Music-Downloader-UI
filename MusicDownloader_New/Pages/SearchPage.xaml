@@ -12,15 +12,15 @@
     <Grid>
         <TextBox Height="25" 
                  Name="searchTextBox"
-                 Margin="13.673,5,0,0" 
+                 Margin="14,5,0,0" 
                  FontSize="12"
                  TextWrapping="Wrap" 
                  VerticalAlignment="Top" 
                  HorizontalAlignment="Left" 
-                 Width="175"
+                 Width="136"
                  pu:TextBoxHelper.CornerRadius="10"
                  pu:TextBoxHelper.Watermark="搜索" PreviewKeyDown="searchTextBox_PreviewKeyDown"/>
-        <Button Name="searchButton" Click="searchButton_Click" HorizontalAlignment="Left" Height="35" Margin="158.673,0,0,0" VerticalAlignment="Top" Width="20"
+        <Button Name="searchButton" Click="searchButton_Click" HorizontalAlignment="Left" Height="35" Margin="125,0,0,0" VerticalAlignment="Top" Width="20"
                 pu:ButtonHelper.ButtonStyle="Link"
                 Content="&#xf002;"
                 FontFamily="{StaticResource FontAwesome}"/>
@@ -49,6 +49,20 @@
                 <DataGridTextColumn Header="专辑" Width="*" IsReadOnly="True" Binding="{Binding Album}"/>
             </DataGrid.Columns>
         </DataGrid>
+        <TextBox Height="25" 
+            Name="musiclistTextBox"
+            Margin="162,5,0,0" 
+            FontSize="12"
+            TextWrapping="Wrap" 
+            VerticalAlignment="Top" 
+            HorizontalAlignment="Left" 
+            Width="136"
+            pu:TextBoxHelper.CornerRadius="10"
+            pu:TextBoxHelper.Watermark="歌单解析(ID)" PreviewKeyDown="musiclistTextBox_PreviewKeyDown"/>
+        <Button x:Name="musiclistButton" Click="musiclistButton_Click" HorizontalAlignment="Left" Height="35" Margin="273,0,0,0" VerticalAlignment="Top" Width="20"
+            pu:ButtonHelper.ButtonStyle="Link"
+            Content="&#xF002;"
+            FontFamily="{StaticResource FontAwesome}"/>
 
     </Grid>
 </Page>

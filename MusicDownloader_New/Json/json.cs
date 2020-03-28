@@ -23,6 +23,22 @@ namespace MusicDownloader_New.Json
         public string SearchQuantity { get; set; }
     }
 
+    public class Musiclist
+    {
+        public class Root
+        {
+            public Playlist playlist { get; set; }
+        }
+        public class Playlist
+        {
+            public List<TrackIdsItem> trackIds { get; set; }
+        }
+        public class TrackIdsItem
+        {
+            public long id { get; set; }
+        }
+    }
+
     public class Update
     {
         public List<int> Version { get; set; }

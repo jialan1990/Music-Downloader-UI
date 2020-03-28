@@ -21,9 +21,6 @@ using Panuon.UI.Silver.Core;
 
 namespace MusicDownloader_New.Pages
 {
-    /// <summary>
-    /// Search.xaml 的交互逻辑
-    /// </summary>
     public partial class SearchPage : Page
     {
         List<MusicInfo> musicinfo = null;
@@ -31,7 +28,7 @@ namespace MusicDownloader_New.Pages
         Setting setting;
         public List<SearchListItemModel> SearchListItem = new List<SearchListItemModel>();
 
-        #region 列表绑定
+        #region 列表绑定模板
         public class SearchListItemModel
         {
             [DisplayName(" ")]
@@ -45,11 +42,34 @@ namespace MusicDownloader_New.Pages
         }
         #endregion
 
-        public SearchPage(Music m, Setting s)
+        #region 事件
+        private void searchTextBox_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            music = m;
-            setting = s;
-            InitializeComponent();
+            if (e.Key == Key.Enter)
+                searchButton_Click(this, new RoutedEventArgs());
+        }
+
+        private void menu_SelectAll_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            foreach (SearchListItemModel m in SearchListItem)
+            {
+                m.IsSelected = true;
+            }
+            List.Items.Refresh();
+        }
+
+        private void menu_FanSelect_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            foreach (SearchListItemModel m in SearchListItem)
+            {
+                m.IsSelected = !m.IsSelected;
+            }
+            List.Items.Refresh();
+        }
+
+        private void menu_DownloadSelect_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Download();
         }
 
         private void searchButton_Click(object sender, RoutedEventArgs e)
@@ -59,6 +79,26 @@ namespace MusicDownloader_New.Pages
                 Search(searchTextBox.Text);
             }
         }
+
+        private void musiclistButton_Click(object sender, RoutedEventArgs e)
+        {
+            GetMusicList(musiclistTextBox.Text);
+        }
+
+        private void musiclistTextBox_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+                musiclistButton_Click(this, new RoutedEventArgs());
+        }
+        #endregion
+
+        public SearchPage(Music m, Setting s)
+        {
+            music = m;
+            setting = s;
+            InitializeComponent();
+        }
+
         private async void Search(string key)
         {
             var pb = PendingBox.Show("搜索中...", null, false, Application.Current.MainWindow, new PendingBoxConfigurations()
@@ -97,35 +137,41 @@ namespace MusicDownloader_New.Pages
 
         }
 
-        private void searchTextBox_PreviewKeyDown(object sender, KeyEventArgs e)
+        private async void GetMusicList(string id)
         {
-            if (e.Key == Key.Enter)
+            var pb = PendingBox.Show("搜索中...", null, false, Application.Current.MainWindow, new PendingBoxConfigurations()
             {
-                searchButton_Click(this, new RoutedEventArgs());
-            }
-        }
-
-        private void menu_SelectAll_PreviewMouseDown(object sender, MouseButtonEventArgs e)
-        {
-            foreach (SearchListItemModel m in SearchListItem)
+                MaxHeight = 160,
+                MinWidth = 400
+            });
+            try
             {
-                m.IsSelected = true;
+                SearchListItem.Clear();
+                musicinfo?.Clear();
+                await Task.Run(() =>
+                {
+                    musicinfo = music.GetMusicList(id);
+                });
+                foreach (MusicInfo m in musicinfo)
+                {
+                    SearchListItemModel mod = new SearchListItemModel()
+                    {
+                        Album = m.Album,
+                        Singer = m.Singer,
+                        IsSelected = false,
+                        Title = m.Title
+                    };
+                    SearchListItem.Add(mod);
+                }
+                List.ItemsSource = SearchListItem;
+                List.Items.Refresh();
+                pb.Close();
             }
-            List.Items.Refresh();
-        }
-
-        private void menu_FanSelect_PreviewMouseDown(object sender, MouseButtonEventArgs e)
-        {
-            foreach (SearchListItemModel m in SearchListItem)
+            catch
             {
-                m.IsSelected = !m.IsSelected;
+                pb.Close();
+                MessageBoxX.Show("解析错误", configurations: new MessageBoxXConfigurations() { MessageBoxIcon = MessageBoxIcon.Error });
             }
-            List.Items.Refresh();
-        }
-
-        private void menu_DownloadSelect_PreviewMouseDown(object sender, MouseButtonEventArgs e)
-        {
-            Download();
         }
 
         private async void Download()
