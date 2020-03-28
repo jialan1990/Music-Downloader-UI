@@ -1,0 +1,54 @@
+﻿<Page x:Class="MusicDownloader_New.Pages.SearchPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:pu="clr-namespace:Panuon.UI.Silver;assembly=Panuon.UI.Silver"
+      xmlns:local="clr-namespace:MusicDownloader_New.Pages"
+      mc:Ignorable="d"
+      FontFamily="Microsoft YaHei UI Light"
+      Title="Search" Height="339" Width="492">
+
+    <Grid>
+        <TextBox Height="25" 
+                 Name="searchTextBox"
+                 Margin="13.673,5,0,0" 
+                 FontSize="12"
+                 TextWrapping="Wrap" 
+                 VerticalAlignment="Top" 
+                 HorizontalAlignment="Left" 
+                 Width="175"
+                 pu:TextBoxHelper.CornerRadius="10"
+                 pu:TextBoxHelper.Watermark="搜索" PreviewKeyDown="searchTextBox_PreviewKeyDown"/>
+        <Button Name="searchButton" Click="searchButton_Click" HorizontalAlignment="Left" Height="35" Margin="158.673,0,0,0" VerticalAlignment="Top" Width="20"
+                pu:ButtonHelper.ButtonStyle="Link"
+                Content="&#xf002;"
+                FontFamily="{StaticResource FontAwesome}"/>
+        <DataGrid Margin="10,44.338,10,22.667"
+                  Name="List"
+                  pu:DataGridHelper.HeaderMinHeight="25"
+                  CanUserAddRows="False"
+                  AutoGenerateColumns="False"
+                  BorderThickness="1"
+                  ItemsSource="{Binding SearchListItem}">
+            <DataGrid.ContextMenu>
+                <ContextMenu pu:ContextMenuHelper.CornerRadius="5" Width="140">
+                    <MenuItem Name="menu_SelectAll" Header="全选" PreviewMouseDown="menu_SelectAll_PreviewMouseDown"/>
+                    <MenuItem Name="menu_FanSelect" Header="反选" PreviewMouseDown="menu_FanSelect_PreviewMouseDown"/>
+                    <MenuItem Name="menu_DownloadSelect" Header="下载选中" PreviewMouseDown="menu_DownloadSelect_PreviewMouseDown"/>
+                </ContextMenu>
+            </DataGrid.ContextMenu>
+            <DataGrid.Columns>
+                <DataGridCheckBoxColumn Header=" " Width="40" Binding="{Binding IsSelected,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" >
+                    <DataGridCheckBoxColumn.ElementStyle>
+                        <Style TargetType="CheckBox"/>
+                    </DataGridCheckBoxColumn.ElementStyle>
+                </DataGridCheckBoxColumn>
+                <DataGridTextColumn Header="标题" Width="*" IsReadOnly="True" Binding="{Binding Title}"/>
+                <DataGridTextColumn Header="歌手" Width="*" IsReadOnly="True" Binding="{Binding Singer}"/>
+                <DataGridTextColumn Header="专辑" Width="*" IsReadOnly="True" Binding="{Binding Album}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+    </Grid>
+</Page>

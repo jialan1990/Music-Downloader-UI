@@ -1,0 +1,49 @@
+﻿<pu:WindowX x:Class="MusicDownloader_New.MainWindow"
+            xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+            xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+            xmlns:local="clr-namespace:MusicDownloader_New"
+            xmlns:pu="clr-namespace:Panuon.UI.Silver;assembly=Panuon.UI.Silver"
+            mc:Ignorable="d"
+            pu:WindowXCaption.Background="White"
+            pu:WindowXCaption.Header=" "
+            BorderThickness="0"
+            Title="Music Downloader" Height="365" Width="643" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen">
+    <pu:WindowXCaption.ExtendControl>
+        <Button Click="BlogButton_Click" pu:ButtonHelper.ButtonStyle="Link" Content="NiTian1207" FontSize="11" Margin="0 0 10 0" VerticalAlignment="Center"/>
+    </pu:WindowXCaption.ExtendControl>
+    <Grid>
+        <Grid Background="#3E3E3E" HorizontalAlignment="Left" Margin="0,-36.667,0,0" Width="146.667">
+            <TextBlock Block.TextAlignment="Center" FontSize="20" Height="70" Margin="10,9.667,10,0" TextWrapping="Wrap" VerticalAlignment="Top">
+                <Run FontSize="28" FontFamily="Microsoft YaHei UI Light" Foreground="White">Music</Run>
+                <Run FontSize="18" FontFamily="Microsoft YaHei UI Light" Foreground="#FF6CDBF3">Downloader</Run>
+                <TextBlock.Effect>
+                    <DropShadowEffect Color="White" ShadowDepth="1" BlurRadius="5" Opacity="0.7"/>
+                </TextBlock.Effect>
+            </TextBlock>
+            <TreeView Name="LeftMenu"
+                Background="Transparent" 
+                Foreground="White"
+                FontFamily="Microsoft YaHei UI Light"
+                Margin="0,79.667,0,84"
+                pu:TreeViewHelper.ItemHeight="40"
+                pu:TreeViewHelper.TreeViewStyle="Modern"
+                pu:TreeViewHelper.SelectedBackground="#22FFFFFF"
+                SelectedItemChanged="LeftMenu_SelectedItemChanged">
+                <TreeViewItem Header="主页"
+                              IsSelected="True"
+                              pu:TreeViewHelper.ItemIcon="&#xf015;" />
+                <TreeViewItem Header="下载"
+                              pu:TreeViewHelper.ItemIcon="&#xf019;"/>
+                <TreeViewItem Header="设置"
+                              pu:TreeViewHelper.ItemIcon="&#xf013;"/>
+                <TreeViewItem Header="赞助"
+                              pu:TreeViewHelper.ItemIcon="&#xf0d6;"/>
+            </TreeView>
+        </Grid>
+        <Grid Margin="146.667,0,0,0">
+            <Frame Name="frame" NavigationUIVisibility="Hidden"/>
+        </Grid>
+    </Grid>
+</pu:WindowX>

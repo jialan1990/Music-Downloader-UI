@@ -1,0 +1,33 @@
+﻿<Page x:Class="MusicDownloader_New.DownloadPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:pu="clr-namespace:Panuon.UI.Silver;assembly=Panuon.UI.Silver"
+      xmlns:local="clr-namespace:MusicDownloader_New"
+      mc:Ignorable="d" 
+      FontSize="12"
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="DownloadPage" Height="339" Width="492">
+
+    <Grid>
+        <DataGrid HorizontalAlignment="Left" 
+                  Name="List"
+                  Height="305" 
+                  VerticalAlignment="Top" 
+                  Width="472" 
+                  pu:DataGridHelper.HeaderMinHeight="25"
+                  CanUserAddRows="False"
+                  AutoGenerateColumns="False"
+                  BorderThickness="1" Margin="10,0,0,0"
+                  ItemsSource="{Binding listitem}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="标题" Width="*" Binding="{Binding Title}"/>
+                <DataGridTextColumn Header="歌手" Width="*" Binding="{Binding Singer}"/>
+                <DataGridTextColumn Header="专辑" Width="*" Binding="{Binding Album}"/>
+                <DataGridTextColumn Header="状态" Width="*" Binding="{Binding State}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+    </Grid>
+</Page>

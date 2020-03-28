@@ -1,0 +1,50 @@
+﻿<Page x:Class="MusicDownloader_New.Pages.SettingPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:MusicDownloader_New.Pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="SettingPage" Height="339" Width="492" Loaded="Page_Loaded">
+
+    <Grid>
+        <StackPanel Orientation="Vertical">
+            <WrapPanel Margin="0 20 0 0" HorizontalAlignment="Center">
+                <Label Content="保存路径" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" Width="60"/>
+                <TextBox Name="savePathTextBox" HorizontalAlignment="Left" Height="25" TextWrapping="Wrap" VerticalAlignment="Center" Width="250" RenderTransformOrigin="0.438,0.4"/>
+                <Button Click="browseButton_Click" Name="browseButton" Content="浏览" FontSize="13" HorizontalAlignment="Left" Height="25" Margin="10,2,0,0" VerticalAlignment="Top" Width="50"/>
+            </WrapPanel>
+            <WrapPanel Margin="0 10 0 0" HorizontalAlignment="Center">
+                <Label Content="单次搜索数量"/>
+                <TextBox InputMethod.IsInputMethodEnabled="False" Name="searchQuantityTextBox" Width="200" Height="25" PreviewKeyDown="searchQuantityTextBox_PreviewKeyDown"/>
+            </WrapPanel>
+            <WrapPanel Margin="0 10 0 0" HorizontalAlignment="Center">
+                <Label Content="下载品质" HorizontalAlignment="Left" Height="25"  VerticalAlignment="Top"/>
+                <ComboBox Name="qualityComboBox" Margin="10 0 0 0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="200" Height="25">
+                    <ComboBoxItem Content="无损(999000)" IsSelected="True" HorizontalAlignment="Left" Width="200" Margin="0,0,-2,0"/>
+                    <ComboBoxItem Content="极高(320000)" HorizontalAlignment="Left" Width="200"/>
+                    <ComboBoxItem Content="标准(128000)" HorizontalAlignment="Left" Width="200"/>
+                </ComboBox>
+            </WrapPanel>
+            <WrapPanel Margin="0 10 0 0" HorizontalAlignment="Center">
+                <Label Content="文件名保存格式" HorizontalAlignment="Left" Height="25"  VerticalAlignment="Top"/>
+                <ComboBox Name="nameStyleComboBox" Margin="10 0 0 0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="200" Height="25">
+                    <ComboBoxItem Content="标题 - 歌手" IsSelected="True" HorizontalAlignment="Left" Width="200" Margin="0,0,-2,0"/>
+                    <ComboBoxItem Content="歌手 - 标题" HorizontalAlignment="Left" Width="200"/>
+                </ComboBox>
+            </WrapPanel>
+            <WrapPanel Margin="0 10 0 0" HorizontalAlignment="Center">
+                <Label Content="路径保存格式" HorizontalAlignment="Left" Height="25"  VerticalAlignment="Top"/>
+                <ComboBox Name="pathStyleComboBox" Margin="10 0 0 0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="200" Height="25">
+                    <ComboBoxItem Content="无" IsSelected="True" HorizontalAlignment="Left" Width="200" Margin="0,0,-2,0"/>
+                    <ComboBoxItem Content="歌手 - 音乐" HorizontalAlignment="Left" Width="200"/>
+                    <ComboBoxItem Content="歌手 - 专辑 - 音乐" HorizontalAlignment="Left" Width="200"/>
+                </ComboBox>
+            </WrapPanel>
+            <CheckBox Name="lrcCheckBox" Margin="0 10 0 0" Content="下载歌词" IsChecked="True" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+            <CheckBox Name="picCheckBox" Margin="0 10 0 0" Content="下载封面" IsChecked="True" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+            <Button Click="Button_Click"  Content="保存" Margin="0 20 0 0" HorizontalAlignment="Center" Width="100" Height="40" />
+        </StackPanel>
+    </Grid>
+</Page>
