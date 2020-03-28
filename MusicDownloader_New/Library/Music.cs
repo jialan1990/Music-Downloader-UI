@@ -16,7 +16,7 @@ namespace MusicDownloader_New.Library
     public class Music
     {
         List<int> version = new List<int> { 1, 0, 0 };
-        
+        const string ApiUrl = "";//自行搭建接口
         public Setting setting;
         public List<DownloadList> downloadlist = new List<DownloadList>();
         string cookie = "";
