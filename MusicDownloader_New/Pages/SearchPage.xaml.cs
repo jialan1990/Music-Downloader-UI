@@ -66,26 +66,35 @@ namespace MusicDownloader_New.Pages
                 MaxHeight = 160,
                 MinWidth = 400
             });
-            SearchListItem.Clear();
-            musicinfo?.Clear();
-            await Task.Run(() =>
+            try
             {
-                musicinfo = music.Search(key);
-            });
-            foreach (MusicInfo m in musicinfo)
-            {
-                SearchListItemModel mod = new SearchListItemModel()
+                SearchListItem.Clear();
+                musicinfo?.Clear();
+                await Task.Run(() =>
                 {
-                    Album = m.Album,
-                    Singer = m.Singer,
-                    IsSelected = false,
-                    Title = m.Title
-                };
-                SearchListItem.Add(mod);
+                    musicinfo = music.Search(key);
+                });
+                foreach (MusicInfo m in musicinfo)
+                {
+                    SearchListItemModel mod = new SearchListItemModel()
+                    {
+                        Album = m.Album,
+                        Singer = m.Singer,
+                        IsSelected = false,
+                        Title = m.Title
+                    };
+                    SearchListItem.Add(mod);
+                }
+                List.ItemsSource = SearchListItem;
+                List.Items.Refresh();
+                pb.Close();
             }
-            List.ItemsSource = SearchListItem;
-            List.Items.Refresh();
-            pb.Close();
+            catch
+            {
+                pb.Close();
+                MessageBoxX.Show("搜索错误", configurations: new MessageBoxXConfigurations() { MessageBoxIcon = MessageBoxIcon.Error });
+            }
+
         }
 
         private void searchTextBox_PreviewKeyDown(object sender, KeyEventArgs e)
