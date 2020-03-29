@@ -13,7 +13,7 @@
     <Grid>
         <DataGrid HorizontalAlignment="Left" 
                   Name="List"
-                  Height="305" 
+                  Height="300" 
                   VerticalAlignment="Top" 
                   Width="472" 
                   pu:DataGridHelper.HeaderMinHeight="25"
@@ -28,6 +28,7 @@
                 <DataGridTextColumn Header="状态" Width="*" Binding="{Binding State}"/>
             </DataGrid.Columns>
         </DataGrid>
+        <Label Content="打开音乐保存路径" Foreground="Blue" PreviewMouseDown="Label_PreviewMouseDown"  HorizontalAlignment="Left" Margin="10,300,0,0" VerticalAlignment="Top" Height="25"/>
 
     </Grid>
 </Page>

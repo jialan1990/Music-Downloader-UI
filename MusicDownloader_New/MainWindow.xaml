@@ -39,7 +39,7 @@
                 <TreeViewItem Header="设置"
                               pu:TreeViewHelper.ItemIcon="&#xf013;"/>
                 <TreeViewItem Header="赞助"
-                              pu:TreeViewHelper.ItemIcon="&#xf0d6;"/>
+                              pu:TreeViewHelper.ItemIcon="&#xf118;"/>
             </TreeView>
         </Grid>
         <Grid Margin="146.667,0,0,0">

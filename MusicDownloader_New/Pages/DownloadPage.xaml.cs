@@ -3,6 +3,7 @@ using MusicDownloader_New.Library;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -61,6 +62,11 @@ namespace MusicDownloader_New
                 List.Items.Refresh();
             }));
 
+        }
+
+        private void Label_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Process.Start(music.setting.SavePath);
         }
     }
 }

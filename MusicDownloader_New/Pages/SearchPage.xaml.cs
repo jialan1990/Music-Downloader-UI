@@ -176,11 +176,6 @@ namespace MusicDownloader_New.Pages
 
         private async void Download()
         {
-            var pb = PendingBox.Show("搜索中...", null, false, Application.Current.MainWindow, new PendingBoxConfigurations()
-            {
-                MaxHeight = 160,
-                MinWidth = 400
-            });
             List<DownloadList> dl = new List<DownloadList>();
             for (int i = 0; i < SearchListItem.Count; i++)
             {
@@ -201,11 +196,13 @@ namespace MusicDownloader_New.Pages
                     });
                 }
             }
-            await Task.Run(() =>
+            if (dl.Count != 0)
             {
-                music.Download(dl);
-            });
-            pb.Close();
+                await Task.Run(() =>
+                {
+                    music.Download(dl);
+                });
+            }
         }
     }
 }

@@ -32,10 +32,10 @@
                   BorderThickness="1"
                   ItemsSource="{Binding SearchListItem}">
             <DataGrid.ContextMenu>
-                <ContextMenu pu:ContextMenuHelper.CornerRadius="5" Width="140">
+                <ContextMenu pu:ContextMenuHelper.CornerRadius="5" Width="180">
                     <MenuItem Name="menu_SelectAll" Header="全选" PreviewMouseDown="menu_SelectAll_PreviewMouseDown"/>
                     <MenuItem Name="menu_FanSelect" Header="反选" PreviewMouseDown="menu_FanSelect_PreviewMouseDown"/>
-                    <MenuItem Name="menu_DownloadSelect" Header="下载选中" PreviewMouseDown="menu_DownloadSelect_PreviewMouseDown"/>
+                    <MenuItem Name="menu_DownloadSelect" Header="下载选中音乐" PreviewMouseDown="menu_DownloadSelect_PreviewMouseDown"/>
                 </ContextMenu>
             </DataGrid.ContextMenu>
             <DataGrid.Columns>

@@ -68,6 +68,15 @@ namespace MusicDownloader_New
                 Process.Start("https://www.nitian1207.cn/archives/86");
             }
         }
+
+        private void NotifyError()
+        {
+            var result = MessageBoxX.Show("连接服务器错误", null, Application.Current.MainWindow, MessageBoxButton.OK, new MessageBoxXConfigurations()
+            {
+                MessageBoxIcon = MessageBoxIcon.Error
+            });
+            Environment.Exit(0);
+        }
         #endregion
 
         public MainWindow()
@@ -85,6 +94,10 @@ namespace MusicDownloader_New
             music = new Music(setting);
             HomePage = new SearchPage(music, setting);
             DownloadPage = new DownloadPage(music);
+
+            music.NotifyConnectError += NotifyError;
+            music.NotifyUpdate += NotifyUpdate;
+            
             InitializeComponent();
             frame.Content = HomePage;
         }

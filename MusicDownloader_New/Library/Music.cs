@@ -16,13 +16,18 @@ namespace MusicDownloader_New.Library
     public class Music
     {
         List<int> version = new List<int> { 1, 0, 0 };
-        const string ApiUrl = "";//自行搭建接口
+        const string ApiUrl = "http://116.85.33.135:3000/";//自行搭建接口
         public Setting setting;
         public List<DownloadList> downloadlist = new List<DownloadList>();
         string cookie = "";
         Thread th_Download;
         public delegate void UpdateDownloadPageEventHandler();
+        public delegate void NotifyUpdateEventHandler();
+        public delegate void NotifyConnectErrorEventHandler();
         public event UpdateDownloadPageEventHandler UpdateDownloadPage;
+        public event NotifyUpdateEventHandler NotifyUpdate;
+        public event NotifyConnectErrorEventHandler NotifyConnectError;
+
 
         /// <summary>
         /// 获取更新数据
@@ -30,27 +35,35 @@ namespace MusicDownloader_New.Library
         /// <returns></returns>
         void Update()
         {
-            WebClient wc = new WebClient();
-            StreamReader sr = new StreamReader(wc.OpenRead("http://nitian1207.cn/update/MusicDownload.json"));
-            Update update = JsonConvert.DeserializeObject<Update>(sr.ReadToEnd());
-            cookie = update.Cookie;
-            bool needupdate = false;
-            if (update.Version[0] > version[0])
+            try
             {
-                needupdate = true;
+                WebClient wc = new WebClient();
+                StreamReader sr = new StreamReader(wc.OpenRead("http://nitian1207.cn/update/MusicDownload.json"));
+                Update update = JsonConvert.DeserializeObject<Update>(sr.ReadToEnd());
+                cookie = update.Cookie;
+                bool needupdate = false;
+                if (update.Version[0] > version[0])
+                {
+                    needupdate = true;
+                }
+                else if (update.Version[1] > version[1])
+                {
+                    needupdate = true;
+                }
+                else if (update.Version[2] > version[2])
+                {
+                    needupdate = true;
+                }
+                if (needupdate)
+                {
+                    NotifyUpdate();
+                }
             }
-            else if (update.Version[1] > version[1])
+            catch
             {
-                needupdate = true;
+                NotifyConnectError();
             }
-            else if (update.Version[2] > version[2])
-            {
-                needupdate = true;
-            }
-            if (needupdate)
-            {
-
-            }
+            
         }
 
         /// <summary>
