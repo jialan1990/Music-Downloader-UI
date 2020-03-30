@@ -74,7 +74,7 @@ namespace MusicDownloader_New.Pages
 
         private void searchButton_Click(object sender, RoutedEventArgs e)
         {
-            if (searchTextBox.Text != "")
+            if (searchTextBox.Text?.Replace(" ","") != "")
             {
                 Search(searchTextBox.Text);
             }
@@ -82,13 +82,38 @@ namespace MusicDownloader_New.Pages
 
         private void musiclistButton_Click(object sender, RoutedEventArgs e)
         {
-            GetMusicList(musiclistTextBox.Text);
+            if (musiclistTextBox.Text?.Replace(" ", "") != "")
+            {
+                GetMusicList(musiclistTextBox.Text);
+            }
         }
 
         private void musiclistTextBox_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
                 musiclistButton_Click(this, new RoutedEventArgs());
+            if (!((74 <= (int)e.Key && (int)e.Key <= 83) || (34 <= (int)e.Key && (int)e.Key <= 43) || e.Key == Key.Back))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void albumTextBox_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+                albumButton_Click(this, new RoutedEventArgs());
+            if (!((74 <= (int)e.Key && (int)e.Key <= 83) || (34 <= (int)e.Key && (int)e.Key <= 43) || e.Key == Key.Back))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void albumButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (albumTextBox.Text?.Replace(" ", "") != "")
+            {
+                GetAblum(albumTextBox.Text);
+            }
         }
         #endregion
 
@@ -139,7 +164,7 @@ namespace MusicDownloader_New.Pages
 
         private async void GetMusicList(string id)
         {
-            var pb = PendingBox.Show("搜索中...", null, false, Application.Current.MainWindow, new PendingBoxConfigurations()
+            var pb = PendingBox.Show("解析中...", null, false, Application.Current.MainWindow, new PendingBoxConfigurations()
             {
                 MaxHeight = 160,
                 MinWidth = 400
@@ -202,6 +227,43 @@ namespace MusicDownloader_New.Pages
                 {
                     music.Download(dl);
                 });
+            }
+        }
+
+        private async void GetAblum(string id)
+        {
+            var pb = PendingBox.Show("解析中...", null, false, Application.Current.MainWindow, new PendingBoxConfigurations()
+            {
+                MaxHeight = 160,
+                MinWidth = 400
+            });
+            try
+            {
+                SearchListItem.Clear();
+                musicinfo?.Clear();
+                await Task.Run(() =>
+                {
+                    musicinfo = music.GetAlbum(id);
+                });
+                foreach (MusicInfo m in musicinfo)
+                {
+                    SearchListItemModel mod = new SearchListItemModel()
+                    {
+                        Album = m.Album,
+                        Singer = m.Singer,
+                        IsSelected = false,
+                        Title = m.Title
+                    };
+                    SearchListItem.Add(mod);
+                }
+                List.ItemsSource = SearchListItem;
+                List.Items.Refresh();
+                pb.Close();
+            }
+            catch
+            {
+                pb.Close();
+                MessageBoxX.Show("解析错误", configurations: new MessageBoxXConfigurations() { MessageBoxIcon = MessageBoxIcon.Error });
             }
         }
     }

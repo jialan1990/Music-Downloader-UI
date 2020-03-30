@@ -63,7 +63,7 @@ namespace MusicDownloader_New.Library
             {
                 NotifyConnectError();
             }
-            
+
         }
 
         /// <summary>
@@ -161,13 +161,13 @@ namespace MusicDownloader_New.Library
             for (int i = 0; i < mdr.songs.Count; i++)
             {
                 string singer = "";
-                List<string> singerid = new List<string>();
+                //List<string> singerid = new List<string>();
                 //string _url = "";
 
                 for (int x = 0; x < mdr.songs[i].ar.Count; x++)
                 {
                     singer += mdr.songs[i].ar[x].name + "、";
-                    singerid.Add(mdr.songs[i].ar[x].id.ToString());
+                    //singerid.Add(mdr.songs[i].ar[x].id.ToString());
                 }
 
                 //for (int x = 0; x < urls.data.Count; x++)
@@ -287,9 +287,26 @@ namespace MusicDownloader_New.Library
 
                 if (downloadlist[0].IfDownloadMusic)
                 {
-                    using (WebClient wc = new WebClient())
+                    if (System.IO.File.Exists(savepath + "\\" + filename))
                     {
-                        wc.DownloadFile(downloadlist[0].Url, savepath + "\\" + filename);
+                        downloadlist[0].State = "音乐已存在";
+                        UpdateDownloadPage();
+                    }
+                    else
+                    {
+                        using (WebClient wc = new WebClient())
+                        {
+                            try
+                            {
+                                wc.DownloadFile(downloadlist[0].Url, savepath + "\\" + filename);
+                            }
+                            catch
+                            {
+                                downloadlist[0].State = "音乐下载错误";
+                                UpdateDownloadPage();
+                                continue;
+                            }
+                        }
                     }
                 }
                 if (downloadlist[0].IfDownloadLrc)
@@ -298,7 +315,15 @@ namespace MusicDownloader_New.Library
                     UpdateDownloadPage();
                     using (WebClient wc = new WebClient())
                     {
-                        wc.DownloadFile(downloadlist[0].LrcUrl, savepath + "\\" + filename.Replace(".flac", ".lrc").Replace(".mp3", ".lrc"));
+                        try
+                        {
+                            wc.DownloadFile(downloadlist[0].LrcUrl, savepath + "\\" + filename.Replace(".flac", ".lrc").Replace(".mp3", ".lrc"));
+                        }
+                        catch
+                        {
+                            downloadlist[0].State = "歌词下载错误";
+                            UpdateDownloadPage();
+                        }
                     }
                 }
                 if (downloadlist[0].IfDownloadPic)
@@ -307,7 +332,15 @@ namespace MusicDownloader_New.Library
                     UpdateDownloadPage();
                     using (WebClient wc = new WebClient())
                     {
-                        wc.DownloadFile(downloadlist[0].PicUrl, savepath + "\\" + filename.Replace(".flac", ".jpg").Replace(".mp3", ".jpg"));
+                        try
+                        {
+                            wc.DownloadFile(downloadlist[0].PicUrl, savepath + "\\" + filename.Replace(".flac", ".jpg").Replace(".mp3", ".jpg"));
+                        }
+                        catch
+                        {
+                            downloadlist[0].State = "图片下载错误";
+                            UpdateDownloadPage();
+                        }
                     }
                 }
                 if (filename.IndexOf(".mp3") != -1)
@@ -345,8 +378,9 @@ namespace MusicDownloader_New.Library
                     }
                     tfile.Save();
                 }
-                downloadlist.Remove(downloadlist[0]);
+                downloadlist[0].State = "下载完成";
                 UpdateDownloadPage();
+                downloadlist.Remove(downloadlist[0]);
             }
         }
 
@@ -448,6 +482,39 @@ namespace MusicDownloader_New.Library
                 ret.Add(mi);
             }
             return ret;
+        }
+
+        /// <summary>
+        /// 解析专辑
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public List<MusicInfo> GetAlbum(string id)
+        {
+            List<MusicInfo> res = new List<MusicInfo>();
+            string url = ApiUrl + "album?id=" + id;
+            Album.Root json = JsonConvert.DeserializeObject<Album.Root>(GetHTML(url));
+            for (int i = 0; i < json.songs.Count; i++)
+            {
+                string singer = "";
+                for (int x = 0; x < json.songs[i].ar.Count; x++)
+                {
+                    singer += json.songs[i].ar[x].name + "、";
+                }
+
+                MusicInfo mi = new MusicInfo()
+                {
+                    Title = json.songs[i].name,
+                    Album = json.album.name,
+                    Id = json.songs[i].id,
+                    LrcUrl = ApiUrl + "lyric?id=" + json.songs[i].id,
+                    PicUrl = json.songs[i].al.picUrl,
+                    Singer = singer.Substring(0, singer.Length - 1)
+                };
+
+                res.Add(mi);
+            }
+            return res;
         }
     }
 }

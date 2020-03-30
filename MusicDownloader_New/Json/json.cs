@@ -188,4 +188,36 @@ namespace MusicDownloader_New.Json
         public string Url { get; set; }
         public string State { get; set; }
     }
+
+    public class Album
+    {
+        public class Root
+        {
+            public List<songs> songs { get; set; }
+            public album album { get; set; }
+        }
+        
+        public class al
+        {
+            public string picUrl { get; set; }
+        }
+
+        public class songs
+        { 
+            public al al { get; set; }
+            public List<ar> ar { get; set; }
+            public string name { get; set; }
+            public long id { get; set; }
+        }
+
+        public class ar
+        { 
+            public string name { get; set; }
+        }
+
+        public class album
+        { 
+            public string name { get; set; }
+        }
+    }
 }

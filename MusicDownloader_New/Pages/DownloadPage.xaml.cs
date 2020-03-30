@@ -51,10 +51,25 @@ namespace MusicDownloader_New
 
         public void UpdateList()
         {
-            listitem.Clear();
+            //listitem.Clear();
             foreach (DownloadList d in music.downloadlist)
             {
-                listitem.Add(new ListModel { Album = d.Album, Singer = d.Singer, State = d.State, Title = d.Title });
+                bool exist = false;
+                int index = 0;
+                for (int i = 0; i < listitem.Count; i++)
+                {
+                    if (listitem[i].Title == d.Title)
+                    {
+                        exist = true;
+                        index = i;
+                        listitem[i].State = d.State;
+                        break;
+                    }
+                }
+                if (!exist)
+                {
+                    listitem.Add(new ListModel { Album = d.Album, Singer = d.Singer, State = d.State, Title = d.Title });
+                }
             }
             Dispatcher.Invoke(new Action(() =>
             {
@@ -67,6 +82,19 @@ namespace MusicDownloader_New
         private void Label_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
             Process.Start(music.setting.SavePath);
+        }
+
+        private void Label_PreviewMouseDown_1(object sender, MouseButtonEventArgs e)
+        {
+            for (int i = 0; i < listitem.Count; i++)
+            {
+                if (listitem[i].State == "下载完成")
+                {
+                    listitem.RemoveAt(i);
+                }
+            }
+            List.ItemsSource = listitem;
+            List.Items.Refresh();
         }
     }
 }

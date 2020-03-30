@@ -57,6 +57,7 @@
             VerticalAlignment="Top" 
             HorizontalAlignment="Left" 
             Width="136"
+            InputMethod.IsInputMethodEnabled="False"
             pu:TextBoxHelper.CornerRadius="10"
             pu:TextBoxHelper.Watermark="歌单解析(ID)" PreviewKeyDown="musiclistTextBox_PreviewKeyDown"/>
         <Button x:Name="musiclistButton" Click="musiclistButton_Click" HorizontalAlignment="Left" Height="35" Margin="288,0,0,0" VerticalAlignment="Top" Width="20"
@@ -72,8 +73,9 @@
             HorizontalAlignment="Left" 
             Width="136"
             pu:TextBoxHelper.CornerRadius="10"
-            pu:TextBoxHelper.Watermark="专辑解析(ID)" PreviewKeyDown="musiclistTextBox_PreviewKeyDown"/>
-        <Button x:Name="albumButton" Click="musiclistButton_Click" HorizontalAlignment="Left" Height="35" Margin="436,0,0,0" VerticalAlignment="Top" Width="20"
+            InputMethod.IsInputMethodEnabled="False"
+            pu:TextBoxHelper.Watermark="专辑解析(ID)" PreviewKeyDown="albumTextBox_PreviewKeyDown"/>
+        <Button x:Name="albumButton" Click="albumButton_Click" HorizontalAlignment="Left" Height="35" Margin="436,0,0,0" VerticalAlignment="Top" Width="20"
             pu:ButtonHelper.ButtonStyle="Link"
             Content="&#xF002;"
             FontFamily="{StaticResource FontAwesome}"/>

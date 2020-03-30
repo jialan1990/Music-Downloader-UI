@@ -46,7 +46,7 @@ namespace MusicDownloader_New
                         frame.Content = DownloadPage;
                         break;
                     case "设置":
-                        frame.Content = SettingPage = new SettingPage(setting);
+                        frame.Content = SettingPage;
                         break;
                     case "赞助":
                         frame.Content = Donate;
@@ -94,10 +94,9 @@ namespace MusicDownloader_New
             music = new Music(setting);
             HomePage = new SearchPage(music, setting);
             DownloadPage = new DownloadPage(music);
-
+            SettingPage = new SettingPage(setting);
             music.NotifyConnectError += NotifyError;
             music.NotifyUpdate += NotifyUpdate;
-            
             InitializeComponent();
             frame.Content = HomePage;
         }

@@ -29,6 +29,7 @@
             </DataGrid.Columns>
         </DataGrid>
         <Label Content="打开音乐保存路径" Foreground="Blue" PreviewMouseDown="Label_PreviewMouseDown"  HorizontalAlignment="Left" Margin="10,300,0,0" VerticalAlignment="Top" Height="25"/>
+        <Label Content="清除已下载项" Foreground="Blue" PreviewMouseDown="Label_PreviewMouseDown_1"  HorizontalAlignment="Left" Margin="400,300,0,0" VerticalAlignment="Top" Height="25"/>
 
     </Grid>
 </Page>
