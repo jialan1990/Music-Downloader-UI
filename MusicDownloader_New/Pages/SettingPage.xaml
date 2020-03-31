@@ -17,7 +17,8 @@
             </WrapPanel>
             <WrapPanel Margin="0 10 0 0" HorizontalAlignment="Center">
                 <Label Content="单次搜索数量"/>
-                <TextBox InputMethod.IsInputMethodEnabled="False" Name="searchQuantityTextBox" Width="200" Height="25" PreviewKeyDown="searchQuantityTextBox_PreviewKeyDown"/>
+                <TextBox InputMethod.IsInputMethodEnabled="False" Name="searchQuantityTextBox" Width="130" Height="25" PreviewKeyDown="searchQuantityTextBox_PreviewKeyDown"/>
+                <Label FontSize="10" VerticalAlignment="Center" Foreground="Gray" Content="不建议太高，容易导致程序崩溃"/>
             </WrapPanel>
             <WrapPanel Margin="0 10 0 0" HorizontalAlignment="Center">
                 <Label Content="下载品质" HorizontalAlignment="Left" Height="25"  VerticalAlignment="Top"/>

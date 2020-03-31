@@ -10,22 +10,24 @@
       Title="Search" Height="339" Width="492">
 
     <Grid>
+        <Label FontSize="11" Content="热歌榜" PreviewMouseDown="Label_PreviewMouseDown" Foreground="BlueViolet" HorizontalAlignment="Left" Margin="148,26,0,0" VerticalAlignment="Top" Height="31"/>
+
         <TextBox Height="25" 
-                 Name="searchTextBox"
-                 Margin="29,5,0,0" 
+                 x:Name="searchTextBox"
+                 Margin="29,4,0,0" 
                  FontSize="12"
                  TextWrapping="Wrap" 
                  VerticalAlignment="Top" 
                  HorizontalAlignment="Left" 
                  Width="136"
                  pu:TextBoxHelper.CornerRadius="10"
-                 pu:TextBoxHelper.Watermark="搜索" PreviewKeyDown="searchTextBox_PreviewKeyDown"/>
-        <Button Name="searchButton" Click="searchButton_Click" HorizontalAlignment="Left" Height="35" Margin="140,0,0,0" VerticalAlignment="Top" Width="20"
+                 pu:TextBoxHelper.Watermark="搜索(歌名或歌手)" PreviewKeyDown="searchTextBox_PreviewKeyDown"/>
+        <Button x:Name="searchButton" Click="searchButton_Click" HorizontalAlignment="Left" Height="35" Margin="140,-1,0,0" VerticalAlignment="Top" Width="20"
                 pu:ButtonHelper.ButtonStyle="Link"
-                Content="&#xf002;"
+                Content="&#xF002;"
                 FontFamily="{StaticResource FontAwesome}"/>
-        <DataGrid Margin="10,44.338,10,22.667"
-                  Name="List"
+        <DataGrid Margin="10,50,10,19"
+                  x:Name="List"
                   pu:DataGridHelper.HeaderMinHeight="25"
                   CanUserAddRows="False"
                   AutoGenerateColumns="False"
@@ -33,15 +35,17 @@
                   ItemsSource="{Binding SearchListItem}">
             <DataGrid.ContextMenu>
                 <ContextMenu pu:ContextMenuHelper.CornerRadius="5" Width="180">
-                    <MenuItem Name="menu_SelectAll" Header="全选" PreviewMouseDown="menu_SelectAll_PreviewMouseDown"/>
-                    <MenuItem Name="menu_FanSelect" Header="反选" PreviewMouseDown="menu_FanSelect_PreviewMouseDown"/>
-                    <MenuItem Name="menu_DownloadSelect" Header="下载选中音乐" PreviewMouseDown="menu_DownloadSelect_PreviewMouseDown"/>
+                    <MenuItem x:Name="menu_SelectAll" Header="全选" PreviewMouseDown="menu_SelectAll_PreviewMouseDown"/>
+                    <MenuItem x:Name="menu_FanSelect" Header="反选" PreviewMouseDown="menu_FanSelect_PreviewMouseDown"/>
+                    <MenuItem x:Name="menu_DownloadSelect" Header="下载选中音乐" PreviewMouseDown="menu_DownloadSelect_PreviewMouseDown"/>
+                    <MenuItem x:Name="menu_DownloadSelectLrc" Header="下载选中歌词" PreviewMouseDown="menu_DownloadSelectLrc_PreviewMouseDown"/>
+                    <MenuItem x:Name="menu_DownloadSelectPic" Header="下载选中图片" PreviewMouseDown="menu_DownloadSelectPic_PreviewMouseDown"/>
                 </ContextMenu>
             </DataGrid.ContextMenu>
             <DataGrid.Columns>
-                <DataGridCheckBoxColumn Header=" " Width="40" Binding="{Binding IsSelected,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" >
+                <DataGridCheckBoxColumn Header=" " Width="40" Binding="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" >
                     <DataGridCheckBoxColumn.ElementStyle>
-                        <Style TargetType="CheckBox"/>
+                        <Style TargetType="{x:Type CheckBox}"/>
                     </DataGridCheckBoxColumn.ElementStyle>
                 </DataGridCheckBoxColumn>
                 <DataGridTextColumn Header="标题" Width="*" IsReadOnly="True" Binding="{Binding Title}"/>
@@ -50,8 +54,8 @@
             </DataGrid.Columns>
         </DataGrid>
         <TextBox Height="25" 
-            Name="musiclistTextBox"
-            Margin="177,5,0,0" 
+            x:Name="musiclistTextBox"
+            Margin="177,4,0,0" 
             FontSize="12"
             TextWrapping="Wrap" 
             VerticalAlignment="Top" 
@@ -60,13 +64,13 @@
             InputMethod.IsInputMethodEnabled="False"
             pu:TextBoxHelper.CornerRadius="10"
             pu:TextBoxHelper.Watermark="歌单解析(ID)" PreviewKeyDown="musiclistTextBox_PreviewKeyDown"/>
-        <Button x:Name="musiclistButton" Click="musiclistButton_Click" HorizontalAlignment="Left" Height="35" Margin="288,0,0,0" VerticalAlignment="Top" Width="20"
+        <Button x:Name="musiclistButton" Click="musiclistButton_Click" HorizontalAlignment="Left" Height="35" Margin="288,-1,0,0" VerticalAlignment="Top" Width="20"
             pu:ButtonHelper.ButtonStyle="Link"
             Content="&#xF002;"
             FontFamily="{StaticResource FontAwesome}"/>
         <TextBox Height="25" 
             x:Name="albumTextBox"
-            Margin="325,5,0,0" 
+            Margin="325,4,0,0" 
             FontSize="12"
             TextWrapping="Wrap" 
             VerticalAlignment="Top" 
@@ -75,10 +79,13 @@
             pu:TextBoxHelper.CornerRadius="10"
             InputMethod.IsInputMethodEnabled="False"
             pu:TextBoxHelper.Watermark="专辑解析(ID)" PreviewKeyDown="albumTextBox_PreviewKeyDown"/>
-        <Button x:Name="albumButton" Click="albumButton_Click" HorizontalAlignment="Left" Height="35" Margin="436,0,0,0" VerticalAlignment="Top" Width="20"
+        <Button x:Name="albumButton" Click="albumButton_Click" HorizontalAlignment="Left" Height="35" Margin="436,-1,0,0" VerticalAlignment="Top" Width="20"
             pu:ButtonHelper.ButtonStyle="Link"
             Content="&#xF002;"
             FontFamily="{StaticResource FontAwesome}"/>
+        <Label FontSize="11" Content="新歌榜" PreviewMouseDown="Label_PreviewMouseDown_1" Foreground="BlueViolet" HorizontalAlignment="Left" Margin="191,26,0,0" VerticalAlignment="Top" Height="31"/>
+        <Label FontSize="11" Content="飙升榜" PreviewMouseDown="Label_PreviewMouseDown_2" Foreground="BlueViolet" HorizontalAlignment="Left" Margin="234,26,0,0" VerticalAlignment="Top" Height="31"/>
+        <Label FontSize="11" Content="原创榜" PreviewMouseDown="Label_PreviewMouseDown_3" Foreground="BlueViolet" HorizontalAlignment="Left" Margin="277,26,0,0" VerticalAlignment="Top" Height="31"/>
 
     </Grid>
 </Page>

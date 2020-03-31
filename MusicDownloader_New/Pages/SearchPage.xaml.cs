@@ -43,6 +43,16 @@ namespace MusicDownloader_New.Pages
         #endregion
 
         #region 事件
+        private void menu_DownloadSelectLrc_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Download(true);
+        }
+
+        private void menu_DownloadSelectPic_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Download(false, true);
+        }
+
         private void searchTextBox_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
@@ -74,7 +84,7 @@ namespace MusicDownloader_New.Pages
 
         private void searchButton_Click(object sender, RoutedEventArgs e)
         {
-            if (searchTextBox.Text?.Replace(" ","") != "")
+            if (searchTextBox.Text?.Replace(" ", "") != "")
             {
                 Search(searchTextBox.Text);
             }
@@ -114,6 +124,46 @@ namespace MusicDownloader_New.Pages
             {
                 GetAblum(albumTextBox.Text);
             }
+        }
+
+        /// <summary>
+        /// 热歌榜
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Label_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            GetMusicList("3778678");
+        }
+
+        /// <summary>
+        /// 新歌榜
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Label_PreviewMouseDown_1(object sender, MouseButtonEventArgs e)
+        {
+            GetMusicList("3779629");
+        }
+
+        /// <summary>
+        /// 飙升榜
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Label_PreviewMouseDown_2(object sender, MouseButtonEventArgs e)
+        {
+            GetMusicList("19723756");
+        }
+
+        /// <summary>
+        /// 原创榜
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Label_PreviewMouseDown_3(object sender, MouseButtonEventArgs e)
+        {
+            GetMusicList("2884035");
         }
         #endregion
 
@@ -199,26 +249,61 @@ namespace MusicDownloader_New.Pages
             }
         }
 
-        private async void Download()
+        private async void Download(bool ifonlydownloadlrc = false, bool ifonlydownloadpic = false)
         {
             List<DownloadList> dl = new List<DownloadList>();
             for (int i = 0; i < SearchListItem.Count; i++)
             {
                 if (SearchListItem[i].IsSelected)
                 {
-                    dl.Add(new DownloadList
+                    if (ifonlydownloadlrc)
                     {
-                        Id = musicinfo[i].Id,
-                        IfDownloadLrc = setting.IfDownloadLrc,
-                        IfDownloadMusic = true,
-                        IfDownloadPic = setting.IfDownloadPic,
-                        Album = musicinfo[i].Album,
-                        LrcUrl = musicinfo[i].LrcUrl,
-                        PicUrl = musicinfo[i].PicUrl,
-                        Quality = setting.DownloadQuality,
-                        Singer = musicinfo[i].Singer,
-                        Title = musicinfo[i].Title,
-                    });
+                        dl.Add(new DownloadList
+                        {
+                            Id = musicinfo[i].Id,
+                            IfDownloadLrc = true,
+                            IfDownloadMusic = false,
+                            IfDownloadPic = false,
+                            Album = musicinfo[i].Album,
+                            LrcUrl = musicinfo[i].LrcUrl,
+                            PicUrl = musicinfo[i].PicUrl,
+                            Quality = setting.DownloadQuality,
+                            Singer = musicinfo[i].Singer,
+                            Title = musicinfo[i].Title,
+                        });
+                    }
+                    else if (ifonlydownloadpic)
+                    {
+                        dl.Add(new DownloadList
+                        {
+                            Id = musicinfo[i].Id,
+                            IfDownloadLrc = false,
+                            IfDownloadMusic = false,
+                            IfDownloadPic = true,
+                            Album = musicinfo[i].Album,
+                            LrcUrl = musicinfo[i].LrcUrl,
+                            PicUrl = musicinfo[i].PicUrl,
+                            Quality = setting.DownloadQuality,
+                            Singer = musicinfo[i].Singer,
+                            Title = musicinfo[i].Title,
+                        });
+                    }
+                    else
+                    {
+                        dl.Add(new DownloadList
+                        {
+                            Id = musicinfo[i].Id,
+                            IfDownloadLrc = setting.IfDownloadLrc,
+                            IfDownloadMusic = true,
+                            IfDownloadPic = setting.IfDownloadPic,
+                            Album = musicinfo[i].Album,
+                            LrcUrl = musicinfo[i].LrcUrl,
+                            PicUrl = musicinfo[i].PicUrl,
+                            Quality = setting.DownloadQuality,
+                            Singer = musicinfo[i].Singer,
+                            Title = musicinfo[i].Title,
+                        });
+                    }
                 }
             }
             if (dl.Count != 0)

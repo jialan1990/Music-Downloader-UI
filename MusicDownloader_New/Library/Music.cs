@@ -16,7 +16,7 @@ namespace MusicDownloader_New.Library
     public class Music
     {
         List<int> version = new List<int> { 1, 0, 0 };
-        const string ApiUrl = "";//自行搭建接口
+        const string ApiUrl = "http://116.85.33.135:3000/";//自行搭建接口
         public Setting setting;
         public List<DownloadList> downloadlist = new List<DownloadList>();
         string cookie = "";
@@ -81,33 +81,37 @@ namespace MusicDownloader_New.Library
         /// </summary>
         public List<MusicInfo> Search(string Key)
         {
-            List<MusicInfo> searchItem = new List<MusicInfo>();
-            string key = Key;
-            int quantity = Int32.Parse(setting.SearchQuantity);
-            int pagequantity = quantity / 100;
-            int remainder = quantity % 100;
+            try
+            {
+                List<MusicInfo> searchItem = new List<MusicInfo>();
+                string key = Key;
+                int quantity = Int32.Parse(setting.SearchQuantity);
+                int pagequantity = quantity / 100;
+                int remainder = quantity % 100;
 
-            if (remainder == 0)
-            {
-                remainder = 100;
-            }
-            if (pagequantity == 0)
-            {
-                pagequantity = 1;
-            }
+                if (remainder == 0)
+                {
+                    remainder = 100;
+                }
+                if (pagequantity == 0)
+                {
+                    pagequantity = 1;
+                }
 
-            for (int i = 0; i < pagequantity; i++)
-            {
-                if (i == pagequantity - 1 && pagequantity >= 1)
+                for (int i = 0; i < pagequantity; i++)
                 {
-                    searchItem.AddRange(Search(key, i + 1, remainder));
+                    if (i == pagequantity - 1 && pagequantity >= 1)
+                    {
+                        searchItem.AddRange(Search(key, i + 1, remainder));
+                    }
+                    else
+                    {
+                        searchItem.AddRange(Search(key, i + 1, 100));
+                    }
                 }
-                else
-                {
-                    searchItem.AddRange(Search(key, i + 1, 100));
-                }
+                return searchItem;
             }
-            return searchItem;
+            catch { return null; }
         }
 
         /// <summary>
