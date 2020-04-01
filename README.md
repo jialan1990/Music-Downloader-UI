@@ -1,4 +1,4 @@
-# Music-Downloader-New-UI
+# Music-Downloader-UI
 C#编写的网易云音乐下载器(WPF)
 
 代码中缺少接口链接 Library - Music.cs - ApiUrl 二次修改请自行搭建
