@@ -1,4 +1,4 @@
-﻿using MusicDownloader_New.Json;
+﻿using MusicDownloader.Json;
 using Newtonsoft.Json;
 using System;
 using System.Collections;
@@ -11,12 +11,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using TagLib;
 
-namespace MusicDownloader_New.Library
+namespace MusicDownloader.Library
 {
     public class Music
     {
         List<int> version = new List<int> { 1, 0, 0 };
-        const string ApiUrl = "";//自行搭建接口
+        const string ApiUrl = "http://116.85.33.135:3000/";//自行搭建接口
         public Setting setting;
         public List<DownloadList> downloadlist = new List<DownloadList>();
         string cookie = "";

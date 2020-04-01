@@ -1,5 +1,5 @@
-﻿using MusicDownloader_New.Json;
-using MusicDownloader_New.Library;
+﻿using MusicDownloader.Json;
+using MusicDownloader.Library;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -19,7 +19,7 @@ using System.Windows.Shapes;
 using Panuon.UI.Silver;
 using Panuon.UI.Silver.Core;
 
-namespace MusicDownloader_New.Pages
+namespace MusicDownloader.Pages
 {
     public partial class SearchPage : Page
     {

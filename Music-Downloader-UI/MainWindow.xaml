@@ -1,15 +1,15 @@
-﻿<pu:WindowX x:Class="MusicDownloader_New.MainWindow"
+﻿<pu:WindowX x:Class="MusicDownloader.MainWindow"
             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-            xmlns:local="clr-namespace:MusicDownloader_New"
+            xmlns:local="clr-namespace:MusicDownloader"
             xmlns:pu="clr-namespace:Panuon.UI.Silver;assembly=Panuon.UI.Silver"
             mc:Ignorable="d"
             pu:WindowXCaption.Background="White"
             pu:WindowXCaption.Header=" "
             BorderThickness="0"
-            Title="Music Downloader" Height="365" Width="643" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen" Icon="音乐.ico">
+            Title="Music Downloader" Height="365" Width="643" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen" Icon="Icon.ico">
     <pu:WindowXCaption.ExtendControl>
         <Button Click="BlogButton_Click" pu:ButtonHelper.ButtonStyle="Link" Content="NiTian1207" FontSize="11" Margin="0 0 10 0" VerticalAlignment="Center"/>
     </pu:WindowXCaption.ExtendControl>

@@ -14,7 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace MusicDownloader_New.Pages
+namespace MusicDownloader.Pages
 {
     /// <summary>
     /// Donate.xaml 的交互逻辑

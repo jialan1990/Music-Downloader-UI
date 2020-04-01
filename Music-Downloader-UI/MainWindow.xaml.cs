@@ -13,13 +13,13 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using MusicDownloader_New.Pages;
+using MusicDownloader.Pages;
 using Panuon.UI.Silver;
-using MusicDownloader_New.Library;
-using MusicDownloader_New.Json;
+using MusicDownloader.Library;
+using MusicDownloader.Json;
 using Panuon.UI.Silver.Core;
 
-namespace MusicDownloader_New
+namespace MusicDownloader
 {
     public partial class MainWindow : WindowX
     {

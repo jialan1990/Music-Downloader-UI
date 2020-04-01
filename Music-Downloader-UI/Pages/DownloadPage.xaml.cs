@@ -1,5 +1,5 @@
-﻿using MusicDownloader_New.Json;
-using MusicDownloader_New.Library;
+﻿using MusicDownloader.Json;
+using MusicDownloader.Library;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -18,7 +18,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace MusicDownloader_New
+namespace MusicDownloader
 {
     /// <summary>
     /// DownloadPage.xaml 的交互逻辑

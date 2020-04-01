@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MusicDownloader_New.Json
+namespace MusicDownloader.Json
 {
     public class Setting
     {

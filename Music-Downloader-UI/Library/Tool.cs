@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Configuration;
 
-namespace MusicDownloader_New.Library
+namespace MusicDownloader.Library
 {
     public class Tool
     {

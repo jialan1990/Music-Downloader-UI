@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Forms;
-using MusicDownloader_New.Json;
-using MusicDownloader_New.Library;
+using MusicDownloader.Json;
+using MusicDownloader.Library;
 using Panuon.UI.Silver;
 using Panuon.UI.Silver.Core;
 using MessageBoxIcon = Panuon.UI.Silver.MessageBoxIcon;
 using Application = System.Windows.Application;
 
-namespace MusicDownloader_New.Pages
+namespace MusicDownloader.Pages
 {
     /// <summary>
     /// SettingPage.xaml 的交互逻辑
