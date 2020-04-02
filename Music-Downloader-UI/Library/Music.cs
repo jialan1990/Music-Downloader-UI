@@ -15,7 +15,7 @@ namespace MusicDownloader.Library
 {
     public class Music
     {
-        List<int> version = new List<int> { 1, 0, 0 };
+        List<int> version = new List<int> { 1, 0, 1 };
         const string ApiUrl = "";//自行搭建接口
         public Setting setting;
         public List<DownloadList> downloadlist = new List<DownloadList>();
@@ -219,9 +219,7 @@ namespace MusicDownloader.Library
             }
             downloadlist.AddRange(dl);
             UpdateDownloadPage();
-            if (th_Download != null && th_Download?.ThreadState != ThreadState.Running)
-                th_Download.Start();
-            else
+            if (th_Download == null || th_Download?.ThreadState == ThreadState.Stopped)
             {
                 th_Download = new Thread(_Download);
                 th_Download.Start();

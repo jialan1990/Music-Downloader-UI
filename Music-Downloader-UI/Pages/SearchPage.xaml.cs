@@ -18,6 +18,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Panuon.UI.Silver;
 using Panuon.UI.Silver.Core;
+using System.Data;
 
 namespace MusicDownloader.Pages
 {
