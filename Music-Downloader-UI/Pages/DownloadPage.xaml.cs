@@ -51,24 +51,27 @@ namespace MusicDownloader
 
         public void UpdateList()
         {
-            //listitem.Clear();
-            foreach (DownloadList d in music.downloadlist)
+            for (int i = 0; i < music.downloadlist.Count; i++)
             {
                 bool exist = false;
-                int index = 0;
-                for (int i = 0; i < listitem.Count; i++)
+                foreach (ListModel l in listitem)
                 {
-                    if (listitem[i].Title == d.Title)
+                    if (l.Title == music.downloadlist[i].Title && l.Singer == music.downloadlist[i].Singer && l.Album == music.downloadlist[i].Album)
                     {
+                        l.State = music.downloadlist[i].State;
                         exist = true;
-                        index = i;
-                        listitem[i].State = d.State;
-                        break;
                     }
                 }
                 if (!exist)
                 {
-                    listitem.Add(new ListModel { Album = d.Album, Singer = d.Singer, State = d.State, Title = d.Title });
+                    listitem.Add(new ListModel
+                    {
+                        Album = music.downloadlist[i].Album,
+                        Singer = music.downloadlist[i].Singer,
+                        State = music.downloadlist[i].State,
+                        Title = music.downloadlist[i].Title
+                    }
+                    );
                 }
             }
             Dispatcher.Invoke(new Action(() =>
@@ -76,7 +79,6 @@ namespace MusicDownloader
                 List.ItemsSource = listitem;
                 List.Items.Refresh();
             }));
-
         }
 
         private void Label_PreviewMouseDown(object sender, MouseButtonEventArgs e)

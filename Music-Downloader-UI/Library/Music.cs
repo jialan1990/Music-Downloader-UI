@@ -15,7 +15,7 @@ namespace MusicDownloader.Library
 {
     public class Music
     {
-        List<int> version = new List<int> { 1, 0, 1 };
+        List<int> version = new List<int> { 1, 0, 2 };
         const string ApiUrl = "";//自行搭建接口
         public Setting setting;
         public List<DownloadList> downloadlist = new List<DownloadList>();
@@ -97,7 +97,6 @@ namespace MusicDownloader.Library
                 {
                     pagequantity = 1;
                 }
-
                 for (int i = 0; i < pagequantity; i++)
                 {
                     if (i == pagequantity - 1 && pagequantity >= 1)
@@ -159,29 +158,14 @@ namespace MusicDownloader.Library
             string _u = ApiUrl + "song/detail?ids=" + ids.Substring(0, ids.Length - 1);
             string j = GetHTML(_u);
             Json.MusicDetails.Root mdr = JsonConvert.DeserializeObject<Json.MusicDetails.Root>(j);
-            //string u = ApiUrl + "song/url?id=" + ids.Substring(0, ids.Length - 1) + "&br=" + setting.DownloadQuality;
-            //Json.GetUrl.Root urls = JsonConvert.DeserializeObject<Json.GetUrl.Root>(GetHTML(u));
-
             for (int i = 0; i < mdr.songs.Count; i++)
             {
                 string singer = "";
-                //List<string> singerid = new List<string>();
-                //string _url = "";
-
                 for (int x = 0; x < mdr.songs[i].ar.Count; x++)
                 {
                     singer += mdr.songs[i].ar[x].name + "、";
                     //singerid.Add(mdr.songs[i].ar[x].id.ToString());
                 }
-
-                //for (int x = 0; x < urls.data.Count; x++)
-                //{
-                //    if (urls.data[x].id == mdr.songs[i].id)
-                //    {
-                //        _url = urls.data[x].url;
-                //    }
-                //}
-
                 Json.MusicInfo mi = new Json.MusicInfo()
                 {
                     Album = mdr.songs[i].al.name,
@@ -204,18 +188,62 @@ namespace MusicDownloader.Library
         public void Download(List<DownloadList> dl)
         {
             string ids = "";
-            foreach (DownloadList d in dl)
+            int times = dl.Count / 100;
+            int remainder = dl.Count % 100;
+            if (remainder == 0)
             {
-                ids += d.Id.ToString() + ",";
-                d.State = "准备下载";
-                UpdateDownloadPage();
+                remainder = 100;
             }
-            ids = ids.Substring(0, ids.Length - 1);
-            string u = ApiUrl + "song/url?id=" + ids + "&br=" + dl[0].Quality;
-            Json.GetUrl.Root urls = JsonConvert.DeserializeObject<Json.GetUrl.Root>(GetHTML(u));
-            for (int i = 0; i < urls.data.Count; i++)
+            if (times == 0)
             {
-                dl[i].Url = urls.data[i].url;
+                times = 1;
+            }
+            for (int i = 0; i < times; i++)
+            {
+                if (i == times - 1 && times >= 1)
+                {
+                    ids = "";
+                    for (int x = 0; x < remainder; x++)
+                    {
+                        ids += dl[i * 100 + x].Id + ",";
+                    }
+                    ids = ids.Substring(0, ids.Length - 1);
+                    string u = ApiUrl + "song/url?id=" + ids + "&br=" + dl[0].Quality;
+                    Json.GetUrl.Root urls = JsonConvert.DeserializeObject<Json.GetUrl.Root>(GetHTML(u));
+                    for (int x = 0; x < remainder; x++)
+                    {
+                        for (int y = 0; y < dl.Count; y++)
+                        {
+                            if (urls.data[x].id == dl[y].Id)
+                            {
+                                dl[y].Url = urls.data[x].url;
+                                dl[y].State = "准备下载";
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    ids = "";
+                    for (int x = 0; x < 100; x++)
+                    {
+                        ids += dl[i * 100 + x].Id + ",";
+                    }
+                    ids = ids.Substring(0, ids.Length - 1);
+                    string u = ApiUrl + "song/url?id=" + ids + "&br=" + dl[0].Quality;
+                    Json.GetUrl.Root urls = JsonConvert.DeserializeObject<Json.GetUrl.Root>(GetHTML(u));
+                    for (int x = 0; x < 100; x++)
+                    {
+                        for (int y = 0; y < dl.Count; y++)
+                        {
+                            if (urls.data[x].id == dl[y].Id)
+                            {
+                                dl[y].Url = urls.data[x].url;
+                                dl[y].State = "准备下载";
+                            }
+                        }
+                    }
+                }
             }
             downloadlist.AddRange(dl);
             UpdateDownloadPage();
@@ -254,6 +282,13 @@ namespace MusicDownloader.Library
             while (downloadlist.Count != 0)
             {
                 downloadlist[0].State = "正在下载音乐";
+                if (downloadlist[0].Url == null)
+                {
+                    downloadlist[0].State = "无版权";
+                    UpdateDownloadPage();
+                    downloadlist.RemoveAt(0);
+                    continue;
+                }
                 UpdateDownloadPage();
                 string savepath = "";
                 string filename = ""; ;
@@ -345,44 +380,48 @@ namespace MusicDownloader.Library
                         }
                     }
                 }
-                if (filename.IndexOf(".mp3") != -1)
+                try
                 {
-                    var tfile = TagLib.File.Create(savepath + "\\" + filename);
-                    tfile.Tag.Title = downloadlist[0].Title;
-                    tfile.Tag.Performers = new string[] { downloadlist[0].Singer };
-                    tfile.Tag.Album = downloadlist[0].Album;
-                    if (downloadlist[0].IfDownloadPic && System.IO.File.Exists(savepath + "\\" + filename.Replace(".flac", "").Replace(".mp3", "") + ".jpg"))
+                    if (filename.IndexOf(".mp3") != -1)
                     {
-                        TagLib.Picture pic = new TagLib.Picture();
-                        pic.Type = TagLib.PictureType.FrontCover;
-                        pic.Description = "Cover";
-                        pic.MimeType = System.Net.Mime.MediaTypeNames.Image.Jpeg;
-                        pic.Data = TagLib.ByteVector.FromPath(savepath + "\\" + filename.Replace(".flac", "").Replace(".mp3", "") + ".jpg");
-                        tfile.Tag.Pictures = new TagLib.IPicture[] { pic };
+                        var tfile = TagLib.File.Create(savepath + "\\" + filename);
+                        tfile.Tag.Title = downloadlist[0].Title;
+                        tfile.Tag.Performers = new string[] { downloadlist[0].Singer };
+                        tfile.Tag.Album = downloadlist[0].Album;
+                        if (downloadlist[0].IfDownloadPic && System.IO.File.Exists(savepath + "\\" + filename.Replace(".flac", "").Replace(".mp3", "") + ".jpg"))
+                        {
+                            TagLib.Picture pic = new TagLib.Picture();
+                            pic.Type = TagLib.PictureType.FrontCover;
+                            pic.Description = "Cover";
+                            pic.MimeType = System.Net.Mime.MediaTypeNames.Image.Jpeg;
+                            pic.Data = TagLib.ByteVector.FromPath(savepath + "\\" + filename.Replace(".flac", "").Replace(".mp3", "") + ".jpg");
+                            tfile.Tag.Pictures = new TagLib.IPicture[] { pic };
+                        }
+                        tfile.Save();
                     }
-                    tfile.Save();
-                }
-                else
-                {
-                    var tfile = TagLib.Flac.File.Create(savepath + "\\" + filename);
-                    tfile.Tag.Title = downloadlist[0].Title;
-                    tfile.Tag.Performers = new string[] { downloadlist[0].Singer };
-                    tfile.Tag.Album = downloadlist[0].Album;
+                    else
+                    {
+                        var tfile = TagLib.Flac.File.Create(savepath + "\\" + filename);
+                        tfile.Tag.Title = downloadlist[0].Title;
+                        tfile.Tag.Performers = new string[] { downloadlist[0].Singer };
+                        tfile.Tag.Album = downloadlist[0].Album;
 
-                    if (downloadlist[0].IfDownloadPic && System.IO.File.Exists(savepath + "\\" + filename.Replace(".flac", "").Replace(".mp3", "") + ".jpg"))
-                    {
-                        TagLib.Picture pic = new TagLib.Picture();
-                        pic.Type = TagLib.PictureType.FrontCover;
-                        pic.Description = "Cover";
-                        pic.MimeType = System.Net.Mime.MediaTypeNames.Image.Jpeg;
-                        pic.Data = TagLib.ByteVector.FromPath(savepath + "\\" + filename.Replace(".flac", "").Replace(".mp3", "") + ".jpg");
-                        tfile.Tag.Pictures = new TagLib.IPicture[] { pic };
+                        if (downloadlist[0].IfDownloadPic && System.IO.File.Exists(savepath + "\\" + filename.Replace(".flac", "").Replace(".mp3", "") + ".jpg"))
+                        {
+                            TagLib.Picture pic = new TagLib.Picture();
+                            pic.Type = TagLib.PictureType.FrontCover;
+                            pic.Description = "Cover";
+                            pic.MimeType = System.Net.Mime.MediaTypeNames.Image.Jpeg;
+                            pic.Data = TagLib.ByteVector.FromPath(savepath + "\\" + filename.Replace(".flac", "").Replace(".mp3", "") + ".jpg");
+                            tfile.Tag.Pictures = new TagLib.IPicture[] { pic };
+                        }
+                        tfile.Save();
                     }
-                    tfile.Save();
                 }
+                catch { }
                 downloadlist[0].State = "下载完成";
                 UpdateDownloadPage();
-                downloadlist.Remove(downloadlist[0]);
+                downloadlist.RemoveAt(0);
             }
         }
 
