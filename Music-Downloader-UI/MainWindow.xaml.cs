@@ -18,6 +18,7 @@ using Panuon.UI.Silver;
 using MusicDownloader.Library;
 using MusicDownloader.Json;
 using Panuon.UI.Silver.Core;
+using System.Threading;
 
 namespace MusicDownloader
 {
@@ -59,19 +60,19 @@ namespace MusicDownloader
         #region 事件
         private void NotifyUpdate()
         {
-            var result = MessageBoxX.Show("检测到新版,是否更新", null, Application.Current.MainWindow, MessageBoxButton.YesNo, new MessageBoxXConfigurations()
+            var result = MessageBoxX.Show("检测到新版,是否更新", "提示:", Application.Current.MainWindow, MessageBoxButton.YesNo, new MessageBoxXConfigurations()
             {
                 MessageBoxIcon = MessageBoxIcon.Warning
             });
             if (result == MessageBoxResult.Yes)
             {
-                Process.Start("https://www.nitian1207.cn/archives/86");
+                Process.Start("https://www.nitian1207.cn/archives/496");
             }
         }
 
         private void NotifyError()
         {
-            var result = MessageBoxX.Show("连接服务器错误", null, Application.Current.MainWindow, MessageBoxButton.OK, new MessageBoxXConfigurations()
+            var result = MessageBoxX.Show("连接服务器错误", "提示:", Application.Current.MainWindow, MessageBoxButton.OK, new MessageBoxXConfigurations()
             {
                 MessageBoxIcon = MessageBoxIcon.Error
             });
@@ -91,14 +92,17 @@ namespace MusicDownloader
                 SavePathStyle = int.Parse(Tool.Config.Read("SavePathStyle") ?? "0"),
                 SearchQuantity = Tool.Config.Read("SearchQuantity") ?? "100"
             };
-            music = new Music(setting);
+            music = new Music(setting, NotifyError, NotifyUpdate);
             HomePage = new SearchPage(music, setting);
             DownloadPage = new DownloadPage(music);
             SettingPage = new SettingPage(setting);
-            music.NotifyConnectError += NotifyError;
-            music.NotifyUpdate += NotifyUpdate;
             InitializeComponent();
             frame.Content = HomePage;
+        }
+
+        private void WindowX_ContentRendered(object sender, EventArgs e)
+        {
+            music.Update();
         }
     }
 }

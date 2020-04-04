@@ -95,7 +95,20 @@ namespace MusicDownloader.Pages
         {
             if (musiclistTextBox.Text?.Replace(" ", "") != "")
             {
-                GetMusicList(musiclistTextBox.Text);
+                string id = musiclistTextBox.Text;
+                if (musiclistTextBox.Text.IndexOf("http") != -1)
+                {
+                    string url = musiclistTextBox.Text;
+                    if (url.IndexOf("userid") != -1)
+                    {
+                        id = url.Substring(url.IndexOf("playlist?id=") + "playlist?id=".Length, url.IndexOf("&userid") - url.IndexOf("playlist?id=") - "playlist?id=".Length);
+                    }
+                    else
+                    {
+                        id = url.Substring(url.IndexOf("playlist?id=") + "playlist?id=".Length);
+                    }
+                }
+                GetMusicList(id);
             }
         }
 
@@ -123,7 +136,20 @@ namespace MusicDownloader.Pages
         {
             if (albumTextBox.Text?.Replace(" ", "") != "")
             {
-                GetAblum(albumTextBox.Text);
+                string id = albumTextBox.Text;
+                if (albumTextBox.Text.IndexOf("http") != -1)
+                {
+                    string url = albumTextBox.Text;
+                    if (url.IndexOf("userid") != -1)
+                    {
+                        id = url.Substring(url.IndexOf("album?id=") + "album?id=".Length, url.IndexOf("&userid") - url.IndexOf("album?id=") - "album?id=".Length);
+                    }
+                    else
+                    {
+                        id = url.Substring(url.IndexOf("album?id=") + "album?id=".Length);
+                    }
+                }
+                GetAblum(id);
             }
         }
 
@@ -227,6 +253,11 @@ namespace MusicDownloader.Pages
                 await Task.Run(() =>
                 {
                     musicinfo = music.GetMusicList(id);
+                    if (musicinfo == null)
+                    {
+                        MessageBoxX.Show("解析错误", configurations: new MessageBoxXConfigurations() { MessageBoxIcon = MessageBoxIcon.Error });
+                        return;
+                    }
                 });
                 foreach (MusicInfo m in musicinfo)
                 {
@@ -330,6 +361,10 @@ namespace MusicDownloader.Pages
                 await Task.Run(() =>
                 {
                     musicinfo = music.GetAlbum(id);
+                    if (musicinfo == null)
+                    {
+                        MessageBoxX.Show("解析错误", configurations: new MessageBoxXConfigurations() { MessageBoxIcon = MessageBoxIcon.Error });
+                    }
                 });
                 foreach (MusicInfo m in musicinfo)
                 {

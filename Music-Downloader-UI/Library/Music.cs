@@ -28,52 +28,53 @@ namespace MusicDownloader.Library
         public event NotifyUpdateEventHandler NotifyUpdate;
         public event NotifyConnectErrorEventHandler NotifyConnectError;
 
-
         /// <summary>
         /// 获取更新数据
         /// </summary>
         /// <returns></returns>
-        void Update()
+        public void Update()
         {
+
+            WebClient wc = new WebClient();
+            StreamReader sr = null;
             try
             {
-                WebClient wc = new WebClient();
-                StreamReader sr = new StreamReader(wc.OpenRead("http://nitian1207.cn/update/MusicDownload.json"));
-                Update update = JsonConvert.DeserializeObject<Update>(sr.ReadToEnd());
-                cookie = update.Cookie;
-                bool needupdate = false;
-                if (update.Version[0] > version[0])
-                {
-                    needupdate = true;
-                }
-                else if (update.Version[1] > version[1])
-                {
-                    needupdate = true;
-                }
-                else if (update.Version[2] > version[2])
-                {
-                    needupdate = true;
-                }
-                if (needupdate)
-                {
-                    NotifyUpdate();
-                }
+                sr = new StreamReader(wc.OpenRead("http://nitian1207.cn/update/MusicDownload.json"));
             }
             catch
             {
                 NotifyConnectError();
             }
-
+            Update update = JsonConvert.DeserializeObject<Update>(sr.ReadToEnd());
+            cookie = update.Cookie;
+            bool needupdate = false;
+            if (update.Version[0] > version[0])
+            {
+                needupdate = true;
+            }
+            else if (update.Version[1] > version[1])
+            {
+                needupdate = true;
+            }
+            else if (update.Version[2] > version[2])
+            {
+                needupdate = true;
+            }
+            if (needupdate)
+            {
+                NotifyUpdate();
+            }
         }
 
         /// <summary>
         /// 构造函数 需要提供设置参数
         /// </summary>
         /// <param name="setting"></param>
-        public Music(Setting setting)
+        public Music(Setting setting, NotifyConnectErrorEventHandler ConnectErrorEventHandler, NotifyUpdateEventHandler UpdateEventHandler)
         {
             this.setting = setting;
-            Update();
+            NotifyConnectError += ConnectErrorEventHandler;
+            NotifyUpdate += UpdateEventHandler;
         }
 
         /// <summary>
@@ -188,11 +189,11 @@ namespace MusicDownloader.Library
         public void Download(List<DownloadList> dl)
         {
             string ids = "";
-            int times = dl.Count / 100;
-            int remainder = dl.Count % 100;
+            int times = dl.Count / 500;
+            int remainder = dl.Count % 500;
             if (remainder == 0)
             {
-                remainder = 100;
+                remainder = 500;
             }
             if (times == 0)
             {
@@ -205,7 +206,7 @@ namespace MusicDownloader.Library
                     ids = "";
                     for (int x = 0; x < remainder; x++)
                     {
-                        ids += dl[i * 100 + x].Id + ",";
+                        ids += dl[i * 500 + x].Id + ",";
                     }
                     ids = ids.Substring(0, ids.Length - 1);
                     string u = ApiUrl + "song/url?id=" + ids + "&br=" + dl[0].Quality;
@@ -225,9 +226,9 @@ namespace MusicDownloader.Library
                 else
                 {
                     ids = "";
-                    for (int x = 0; x < 100; x++)
+                    for (int x = 0; x < 500; x++)
                     {
-                        ids += dl[i * 100 + x].Id + ",";
+                        ids += dl[i * 500 + x].Id + ",";
                     }
                     ids = ids.Substring(0, ids.Length - 1);
                     string u = ApiUrl + "song/url?id=" + ids + "&br=" + dl[0].Quality;
@@ -430,9 +431,15 @@ namespace MusicDownloader.Library
         /// </summary>
         public List<MusicInfo> GetMusicList(string Id)
         {
-            WebClient wc = new WebClient();
             Musiclist.Root musiclistjson = new Musiclist.Root();
-            musiclistjson = JsonConvert.DeserializeObject<Musiclist.Root>(GetHTML(ApiUrl + "playlist/detail?id=" + Id));
+            try
+            {
+                musiclistjson = JsonConvert.DeserializeObject<Musiclist.Root>(GetHTML(ApiUrl + "playlist/detail?id=" + Id));
+            }
+            catch
+            {
+                return null;
+            }
             string ids = "";
             for (int i = 0; i < musiclistjson.playlist.trackIds.Count; i++)
             {
@@ -534,7 +541,15 @@ namespace MusicDownloader.Library
         {
             List<MusicInfo> res = new List<MusicInfo>();
             string url = ApiUrl + "album?id=" + id;
-            Album.Root json = JsonConvert.DeserializeObject<Album.Root>(GetHTML(url));
+            Album.Root json;
+            try
+            {
+                json = JsonConvert.DeserializeObject<Album.Root>(GetHTML(url));
+            }
+            catch
+            {
+                return null;
+            }
             for (int i = 0; i < json.songs.Count; i++)
             {
                 string singer = "";

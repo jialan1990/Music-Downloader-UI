@@ -9,6 +9,7 @@
             pu:WindowXCaption.Background="White"
             pu:WindowXCaption.Header=" "
             BorderThickness="0"
+            ContentRendered="WindowX_ContentRendered"
             Title="Music Downloader" Height="365" Width="643" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen" Icon="Icon.ico">
     <pu:WindowXCaption.ExtendControl>
         <Button Click="BlogButton_Click" pu:ButtonHelper.ButtonStyle="Link" Content="NiTian1207" FontSize="11" Margin="0 0 10 0" VerticalAlignment="Center"/>
