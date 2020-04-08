@@ -196,14 +196,14 @@ namespace MusicDownloader.Json
             public List<songs> songs { get; set; }
             public album album { get; set; }
         }
-        
+
         public class al
         {
             public string picUrl { get; set; }
         }
 
         public class songs
-        { 
+        {
             public al al { get; set; }
             public List<ar> ar { get; set; }
             public string name { get; set; }
@@ -211,13 +211,26 @@ namespace MusicDownloader.Json
         }
 
         public class ar
-        { 
+        {
             public string name { get; set; }
         }
 
         public class album
-        { 
+        {
             public string name { get; set; }
+        }
+    }
+
+    public class Lrc
+    {
+        public class Root
+        {
+            public lrc lrc { get; set; }
+        }
+
+        public class lrc
+        {
+            public string lyric { get; set; }
         }
     }
 }

@@ -15,7 +15,7 @@ namespace MusicDownloader.Library
 {
     public class Music
     {
-        List<int> version = new List<int> { 1, 0, 2 };
+        List<int> version = new List<int> { 1, 0, 4 };
         const string ApiUrl = "";//自行搭建接口
         public Setting setting;
         public List<DownloadList> downloadlist = new List<DownloadList>();
@@ -355,7 +355,13 @@ namespace MusicDownloader.Library
                     {
                         try
                         {
-                            wc.DownloadFile(downloadlist[0].LrcUrl, savepath + "\\" + filename.Replace(".flac", ".lrc").Replace(".mp3", ".lrc"));
+                            string savename = savepath + "\\" + filename.Replace(".flac", ".lrc").Replace(".mp3", ".lrc");
+                            StreamReader sr = new StreamReader(wc.OpenRead(downloadlist[0].LrcUrl));
+                            Lrc.Root lrc = JsonConvert.DeserializeObject<Lrc.Root>(sr.ReadToEnd());
+                            StreamWriter sw = new StreamWriter(savename);
+                            sw.Write(lrc.lrc.lyric);
+                            sw.Flush();
+                            sw.Close();
                         }
                         catch
                         {
