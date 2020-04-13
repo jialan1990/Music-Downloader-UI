@@ -19,6 +19,8 @@ using System.Windows.Shapes;
 using Panuon.UI.Silver;
 using Panuon.UI.Silver.Core;
 using System.Data;
+using System.Net;
+using System.Collections;
 
 namespace MusicDownloader.Pages
 {
@@ -96,16 +98,33 @@ namespace MusicDownloader.Pages
             if (musiclistTextBox.Text?.Replace(" ", "") != "")
             {
                 string id = musiclistTextBox.Text;
-                if (musiclistTextBox.Text.IndexOf("http") != -1)
+                if (apiComboBox.SelectedIndex == 0)
                 {
-                    string url = musiclistTextBox.Text;
-                    if (url.IndexOf("userid") != -1)
+                    if (musiclistTextBox.Text.IndexOf("http") != -1)
                     {
-                        id = url.Substring(url.IndexOf("playlist?id=") + "playlist?id=".Length, url.IndexOf("&userid") - url.IndexOf("playlist?id=") - "playlist?id=".Length);
+                        string url = musiclistTextBox.Text;
+                        if (url.IndexOf("userid") != -1)
+                        {
+                            id = url.Substring(url.IndexOf("playlist?id=") + "playlist?id=".Length, url.IndexOf("&userid") - url.IndexOf("playlist?id=") - "playlist?id=".Length);
+                        }
+                        else
+                        {
+                            id = url.Substring(url.IndexOf("playlist?id=") + "playlist?id=".Length);
+                        }
                     }
-                    else
+                }
+                if (apiComboBox.SelectedIndex == 1)
+                {
+                    if (id.IndexOf("https://c.y.qq.com/") != -1)
                     {
-                        id = url.Substring(url.IndexOf("playlist?id=") + "playlist?id=".Length);
+                        string qqid = Tool.GetRealUrl(id);
+                        List<string> i = Tool.GetMidText(qqid, "id=", "&", false);
+                        id = i[0].ToString();
+                    }
+                    if (id.IndexOf("https://y.qq.com/") != -1)
+                    {
+                        List<string> i = Tool.GetMidText(id, "playlist/", ".html", false);
+                        id = i[0].ToString();
                     }
                 }
                 GetMusicList(id);
@@ -137,16 +156,33 @@ namespace MusicDownloader.Pages
             if (albumTextBox.Text?.Replace(" ", "") != "")
             {
                 string id = albumTextBox.Text;
-                if (albumTextBox.Text.IndexOf("http") != -1)
+                if (apiComboBox.SelectedIndex == 0)
                 {
-                    string url = albumTextBox.Text;
-                    if (url.IndexOf("userid") != -1)
+
+                    if (albumTextBox.Text.IndexOf("http") != -1)
                     {
-                        id = url.Substring(url.IndexOf("album?id=") + "album?id=".Length, url.IndexOf("&userid") - url.IndexOf("album?id=") - "album?id=".Length);
+                        string url = albumTextBox.Text;
+                        if (url.IndexOf("userid") != -1)
+                        {
+                            id = url.Substring(url.IndexOf("album?id=") + "album?id=".Length, url.IndexOf("&userid") - url.IndexOf("album?id=") - "album?id=".Length);
+                        }
+                        else
+                        {
+                            id = url.Substring(url.IndexOf("album?id=") + "album?id=".Length);
+                        }
                     }
-                    else
+                }
+                if (apiComboBox.SelectedIndex == 1)
+                {
+                    if (id.IndexOf("https://c.y.qq.com/") != -1)
                     {
-                        id = url.Substring(url.IndexOf("album?id=") + "album?id=".Length);
+                        MessageBoxX.Show("请将链接复制到浏览器打开后再复制回程序", "提示", configurations: new MessageBoxXConfigurations { MessageBoxIcon = MessageBoxIcon.Warning });
+                        return;
+                    }
+                    if (id.IndexOf("https://y.qq.com/") != -1)
+                    {
+                        List<string> i = Tool.GetMidText(id, "album/", ".html", false);
+                        id = i[0].ToString();
                     }
                 }
                 GetAblum(id);
@@ -212,10 +248,18 @@ namespace MusicDownloader.Pages
             {
                 SearchListItem.Clear();
                 musicinfo?.Clear();
+                int api = apiComboBox.SelectedIndex + 1;
                 await Task.Run(() =>
                 {
-                    musicinfo = music.Search(key);
+                    musicinfo = music.Search(key, api);
                 });
+                //musicinfo = music.Search(key, apiComboBox.SelectedIndex + 1);
+                if (musicinfo == null)
+                {
+                    pb.Close();
+                    MessageBoxX.Show("搜索错误", "警告", Application.Current.MainWindow, MessageBoxButton.OK, new MessageBoxXConfigurations() { MessageBoxIcon = MessageBoxIcon.Error });
+                    return;
+                }
                 foreach (MusicInfo m in musicinfo)
                 {
                     SearchListItemModel mod = new SearchListItemModel()
@@ -234,9 +278,8 @@ namespace MusicDownloader.Pages
             catch
             {
                 pb.Close();
-                MessageBoxX.Show("搜索错误", configurations: new MessageBoxXConfigurations() { MessageBoxIcon = MessageBoxIcon.Error });
+                MessageBoxX.Show("搜索错误", "警告", Application.Current.MainWindow, MessageBoxButton.OK, new MessageBoxXConfigurations() { MessageBoxIcon = MessageBoxIcon.Error });
             }
-
         }
 
         private async void GetMusicList(string id)
@@ -250,15 +293,17 @@ namespace MusicDownloader.Pages
             {
                 SearchListItem.Clear();
                 musicinfo?.Clear();
+                int api = apiComboBox.SelectedIndex + 1;
                 await Task.Run(() =>
                 {
-                    musicinfo = music.GetMusicList(id);
-                    if (musicinfo == null)
-                    {
-                        MessageBoxX.Show("解析错误", configurations: new MessageBoxXConfigurations() { MessageBoxIcon = MessageBoxIcon.Error });
-                        return;
-                    }
+                    musicinfo = music.GetMusicList(id, api);
                 });
+                if (musicinfo == null)
+                {
+                    pb.Close();
+                    MessageBoxX.Show("解析错误", "警告", Application.Current.MainWindow, MessageBoxButton.OK, new MessageBoxXConfigurations() { MessageBoxIcon = MessageBoxIcon.Error });
+                    return;
+                }
                 foreach (MusicInfo m in musicinfo)
                 {
                     SearchListItemModel mod = new SearchListItemModel()
@@ -292,7 +337,7 @@ namespace MusicDownloader.Pages
                     {
                         dl.Add(new DownloadList
                         {
-                            Id = musicinfo[i].Id,
+                            Id = musicinfo[i].Id.ToString(),
                             IfDownloadLrc = true,
                             IfDownloadMusic = false,
                             IfDownloadPic = false,
@@ -302,6 +347,8 @@ namespace MusicDownloader.Pages
                             Quality = setting.DownloadQuality,
                             Singer = musicinfo[i].Singer,
                             Title = musicinfo[i].Title,
+                            Api = musicinfo[i].Api,
+                            strMediaMid = musicinfo[i].strMediaMid
                         });
                     }
                     else if (ifonlydownloadpic)
@@ -318,6 +365,8 @@ namespace MusicDownloader.Pages
                             Quality = setting.DownloadQuality,
                             Singer = musicinfo[i].Singer,
                             Title = musicinfo[i].Title,
+                            Api = musicinfo[i].Api,
+                            strMediaMid = musicinfo[i].strMediaMid
                         });
                     }
                     else
@@ -334,16 +383,25 @@ namespace MusicDownloader.Pages
                             Quality = setting.DownloadQuality,
                             Singer = musicinfo[i].Singer,
                             Title = musicinfo[i].Title,
+                            Api = musicinfo[i].Api,
+                            strMediaMid = musicinfo[i].strMediaMid
                         });
                     }
                 }
             }
             if (dl.Count != 0)
             {
+                int api = apiComboBox.SelectedIndex + 1;
+                var pb = PendingBox.Show("请求处理中...", null, false, Application.Current.MainWindow, new PendingBoxConfigurations()
+                {
+                    MaxHeight = 160,
+                    MinWidth = 400
+                });
                 await Task.Run(() =>
                 {
-                    music.Download(dl);
+                    music.Download(dl, api);
                 });
+                pb.Close();
             }
         }
 
@@ -358,14 +416,17 @@ namespace MusicDownloader.Pages
             {
                 SearchListItem.Clear();
                 musicinfo?.Clear();
+                int api = apiComboBox.SelectedIndex + 1;
                 await Task.Run(() =>
                 {
-                    musicinfo = music.GetAlbum(id);
-                    if (musicinfo == null)
-                    {
-                        MessageBoxX.Show("解析错误", configurations: new MessageBoxXConfigurations() { MessageBoxIcon = MessageBoxIcon.Error });
-                    }
+                    musicinfo = music.GetAlbum(id, api);
                 });
+                if (musicinfo == null)
+                {
+                    pb.Close();
+                    MessageBoxX.Show("解析错误", "警告", configurations: new MessageBoxXConfigurations() { MessageBoxIcon = MessageBoxIcon.Error });
+                    return;
+                }
                 foreach (MusicInfo m in musicinfo)
                 {
                     SearchListItemModel mod = new SearchListItemModel()
@@ -384,7 +445,7 @@ namespace MusicDownloader.Pages
             catch
             {
                 pb.Close();
-                MessageBoxX.Show("解析错误", configurations: new MessageBoxXConfigurations() { MessageBoxIcon = MessageBoxIcon.Error });
+                MessageBoxX.Show("解析错误", "警告", configurations: new MessageBoxXConfigurations() { MessageBoxIcon = MessageBoxIcon.Error });
             }
         }
     }

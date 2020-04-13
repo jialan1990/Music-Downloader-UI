@@ -10,13 +10,13 @@
       Title="Search" Height="339" Width="492">
 
     <Grid>
-        <Label FontSize="12" Content="新歌榜" PreviewMouseDown="Label_PreviewMouseDown_1" Foreground="BlueViolet" HorizontalAlignment="Left" Margin="190,27,0,0" VerticalAlignment="Top" Height="31"/>
-        <Label FontSize="12" Content="飙升榜" PreviewMouseDown="Label_PreviewMouseDown_2" Foreground="BlueViolet" HorizontalAlignment="Left" Margin="236,27,0,0" VerticalAlignment="Top" Height="31"/>
-        <Label FontSize="12" Content="原创榜" PreviewMouseDown="Label_PreviewMouseDown_3" Foreground="BlueViolet" HorizontalAlignment="Left" Margin="282,27,0,0" VerticalAlignment="Top" Height="31"/>
-        <Label FontSize="12" Content="热歌榜" PreviewMouseDown="Label_PreviewMouseDown" Foreground="BlueViolet" HorizontalAlignment="Left" Margin="142,27,0,0" VerticalAlignment="Top" Height="31"/>
+        <Label FontSize="12" Content="新歌榜" PreviewMouseDown="Label_PreviewMouseDown_1" Foreground="BlueViolet" HorizontalAlignment="Left" Margin="190,30,0,0" VerticalAlignment="Top" Height="31"/>
+        <Label FontSize="12" Content="飙升榜" PreviewMouseDown="Label_PreviewMouseDown_2" Foreground="BlueViolet" HorizontalAlignment="Left" Margin="236,30,0,0" VerticalAlignment="Top" Height="31"/>
+        <Label FontSize="12" Content="原创榜" PreviewMouseDown="Label_PreviewMouseDown_3" Foreground="BlueViolet" HorizontalAlignment="Left" Margin="282,30,0,0" VerticalAlignment="Top" Height="31"/>
+        <Label FontSize="12" Content="热歌榜" PreviewMouseDown="Label_PreviewMouseDown" Foreground="BlueViolet" HorizontalAlignment="Left" Margin="142,30,0,0" VerticalAlignment="Top" Height="31"/>
         <TextBox Height="25" 
                  x:Name="searchTextBox"
-                 Margin="29,4,0,0" 
+                 Margin="90,7,0,0" 
                  FontSize="12"
                  TextWrapping="Wrap" 
                  VerticalAlignment="Top" 
@@ -24,11 +24,11 @@
                  Width="136"
                  pu:TextBoxHelper.CornerRadius="10"
                  pu:TextBoxHelper.Watermark="搜索(歌名或歌手)" PreviewKeyDown="searchTextBox_PreviewKeyDown"/>
-        <Button x:Name="searchButton" Click="searchButton_Click" HorizontalAlignment="Left" Height="35" Margin="140,-1,0,0" VerticalAlignment="Top" Width="20"
+        <Button x:Name="searchButton" Click="searchButton_Click" HorizontalAlignment="Left" Height="35" Margin="202,1,0,0" VerticalAlignment="Top" Width="20"
                 pu:ButtonHelper.ButtonStyle="Link"
                 Content="&#xF002;"
                 FontFamily="{StaticResource FontAwesome}"/>
-        <DataGrid Margin="10,53,10,16"
+        <DataGrid Margin="10,57,10,12"
                   x:Name="List"
                   pu:DataGridHelper.HeaderMinHeight="25"
                   CanUserAddRows="False"
@@ -57,34 +57,38 @@
         </DataGrid>
         <TextBox Height="25" 
             x:Name="musiclistTextBox"
-            Margin="177,4,0,0" 
+            Margin="231,7,0,0" 
             FontSize="12"
             TextWrapping="Wrap" 
             VerticalAlignment="Top" 
             HorizontalAlignment="Left" 
-            Width="136"
+            Width="123"
             InputMethod.IsInputMethodEnabled="False"
             pu:TextBoxHelper.CornerRadius="10"
-            pu:TextBoxHelper.Watermark="歌单解析(ID/链接)" PreviewKeyDown="musiclistTextBox_PreviewKeyDown"/>
-        <Button x:Name="musiclistButton" Click="musiclistButton_Click" HorizontalAlignment="Left" Height="35" Margin="288,-1,0,0" VerticalAlignment="Top" Width="20"
+            pu:TextBoxHelper.Watermark="歌单(ID/链接)" PreviewKeyDown="musiclistTextBox_PreviewKeyDown"/>
+        <Button x:Name="musiclistButton" Click="musiclistButton_Click" HorizontalAlignment="Left" Height="35" Margin="329,1,0,0" VerticalAlignment="Top" Width="20"
             pu:ButtonHelper.ButtonStyle="Link"
             Content="&#xF002;"
             FontFamily="{StaticResource FontAwesome}"/>
         <TextBox Height="25" 
             x:Name="albumTextBox"
-            Margin="325,4,0,0" 
+            Margin="359,7,0,0" 
             FontSize="12"
             TextWrapping="Wrap" 
             VerticalAlignment="Top" 
             HorizontalAlignment="Left" 
-            Width="136"
+            Width="121"
             pu:TextBoxHelper.CornerRadius="10"
             InputMethod.IsInputMethodEnabled="False"
-            pu:TextBoxHelper.Watermark="专辑解析(ID/链接)" PreviewKeyDown="albumTextBox_PreviewKeyDown"/>
-        <Button x:Name="albumButton" Click="albumButton_Click" HorizontalAlignment="Left" Height="35" Margin="436,-1,0,0" VerticalAlignment="Top" Width="20"
+            pu:TextBoxHelper.Watermark="专辑(ID/链接)" PreviewKeyDown="albumTextBox_PreviewKeyDown"/>
+        <Button x:Name="albumButton" Click="albumButton_Click" HorizontalAlignment="Left" Height="35" Margin="456,1,0,0" VerticalAlignment="Top" Width="20"
             pu:ButtonHelper.ButtonStyle="Link"
             Content="&#xF002;"
             FontFamily="{StaticResource FontAwesome}"/>
+        <ComboBox pu:ComboBoxHelper.CornerRadius="10" FontSize="12" Name="apiComboBox" HorizontalAlignment="Left" Height="25" Margin="10,7,0,0" VerticalAlignment="Top" Width="75">
+            <ComboBoxItem IsSelected="True" Content="网易云" HorizontalAlignment="Left" Width="106"/>
+            <ComboBoxItem Content="QQ" HorizontalAlignment="Left" Width="106"/>
+        </ComboBox>
 
     </Grid>
 </Page>

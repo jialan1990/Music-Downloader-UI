@@ -51,13 +51,19 @@ namespace MusicDownloader.Json
         public string Title { get; set; }
         public string Singer { get; set; }
         public string Album { get; set; }
-        public long Id { get; set; }
+        public string Id { get; set; }
         //public string Url { get; set; }
         public string LrcUrl { get; set; }
         public string PicUrl { get; set; }
+        public int Api { get; set; }
+
+        /// <summary>
+        /// 只有QQ音乐需要该参数
+        /// </summary>
+        public string strMediaMid { get; set; }
     }
 
-    public class MusicDetails
+    public class NeteaseMusicDetails
     {
         public class Ar
         {
@@ -121,6 +127,34 @@ namespace MusicDownloader.Json
 
     }
 
+    public class QQMusicDetails
+    {
+        public class Root
+        {
+            public data data { get; set; }
+        }
+
+        public class data
+        {
+            public List<list> list { get; set; }
+        }
+
+        public class list
+        {
+            public string songmid { get; set; }
+            public string strMediaMid { get; set; }
+            public string albumname { get; set; }
+            public string songname { get; set; }
+            public string albummid { get; set; }
+            public List<singer> singer { get; set; }
+        }
+
+        public class singer
+        {
+            public string name { get; set; }
+        }
+    }
+
     public class GetUrl
     {
         public class Data
@@ -178,7 +212,7 @@ namespace MusicDownloader.Json
         public string Title { get; set; }
         public string Singer { get; set; }
         public string Album { get; set; }
-        public long Id { get; set; }
+        public string Id { get; set; }
         public string LrcUrl { get; set; }
         public string PicUrl { get; set; }
         public bool IfDownloadLrc { get; set; }
@@ -187,9 +221,11 @@ namespace MusicDownloader.Json
         public string Quality { get; set; }
         public string Url { get; set; }
         public string State { get; set; }
+        public int Api { get; set; }
+        public string strMediaMid { get; set; }
     }
 
-    public class Album
+    public class NeteaseAlbum
     {
         public class Root
         {
@@ -221,7 +257,7 @@ namespace MusicDownloader.Json
         }
     }
 
-    public class Lrc
+    public class NeteaseLrc
     {
         public class Root
         {
@@ -231,6 +267,90 @@ namespace MusicDownloader.Json
         public class lrc
         {
             public string lyric { get; set; }
+        }
+    }
+
+    public class QQLrc
+    {
+        public class Root
+        {
+            public data data { get; set; }
+        }
+
+        public class data
+        {
+            public string lrc { get; set; }
+        }
+    }
+
+    public class QQmusicdetails
+    {
+        public string data { get; set; }
+    }
+
+    public class QQmusiclist
+    {
+        public class Root
+        {
+            public data data { get; set; }
+        }
+
+        public class data
+        {
+            public List<songlist> songlist { get; set; }
+        }
+
+        public class songlist
+        {
+            public string songname { get; set; }
+            public string songmid { get; set; }
+            public string strMediaMid { get; set; }
+            public string albumname { get; set; }
+            public List<singer> singer { get; set; }
+            public string albummid { get; set; }
+        }
+
+        public class singer
+        {
+            public string name { get; set; }
+        }
+    }
+
+    public class QQAlbum
+    {
+        public class Root
+        {
+            public data data { get; set; }
+        }
+
+        public class data
+        {
+            public List<list> list { get; set; }
+        }
+
+        public class list
+        { 
+            public string mid { get; set; }
+            public string title { get; set; }
+            public List<singer> singer { get; set; }
+            public album album { get; set; }
+            public ksong ksong { get; set; }
+        }
+
+        public class singer
+        { 
+            public string title { get; set; }
+        }
+
+        public class album
+        {
+            public string title { get; set; }
+            public string mid { get; set; }
+        }
+
+        public class ksong
+        { 
+            public string mid { get; set; }
         }
     }
 }

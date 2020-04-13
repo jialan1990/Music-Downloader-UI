@@ -88,11 +88,14 @@ namespace MusicDownloader
 
         private void Label_PreviewMouseDown_1(object sender, MouseButtonEventArgs e)
         {
-            for (int i = 0; i < listitem.Count; i++)
+            for (int x = 0; x < 10; x++)
             {
-                if (listitem[i].State == "下载完成")
+                for (int i = 0; i < listitem.Count; i++)
                 {
-                    listitem.RemoveAt(i);
+                    if (listitem[i].State == "下载完成" || listitem[i].State == "无版权" || listitem[i].State == "下载错误")
+                    {
+                        listitem.RemoveAt(i);
+                    }
                 }
             }
             List.ItemsSource = listitem;

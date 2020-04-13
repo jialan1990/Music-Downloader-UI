@@ -10,7 +10,7 @@
 
     <Grid>
         <StackPanel Orientation="Vertical">
-            <WrapPanel Margin="0 20 0 0" HorizontalAlignment="Center">
+            <WrapPanel Margin="0 10 0 0" HorizontalAlignment="Center">
                 <Label Content="保存路径" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" Width="60"/>
                 <TextBox Name="savePathTextBox" HorizontalAlignment="Left" Height="25" TextWrapping="Wrap" VerticalAlignment="Center" Width="250" RenderTransformOrigin="0.438,0.4"/>
                 <Button Click="browseButton_Click" Name="browseButton" Content="浏览" FontSize="13" HorizontalAlignment="Left" Height="25" Margin="10,2,0,0" VerticalAlignment="Top" Width="50"/>
@@ -18,7 +18,9 @@
             <WrapPanel Margin="0 10 0 0" HorizontalAlignment="Center">
                 <Label Content="单次搜索数量"/>
                 <TextBox InputMethod.IsInputMethodEnabled="False" Name="searchQuantityTextBox" Width="130" Height="25" PreviewKeyDown="searchQuantityTextBox_PreviewKeyDown"/>
-                <Label FontSize="10" VerticalAlignment="Center" Foreground="Gray" Content="不建议太高，容易导致程序崩溃"/>
+            </WrapPanel>
+            <WrapPanel Margin="0 3 0 0" HorizontalAlignment="Center">
+                <Label FontSize="10" VerticalAlignment="Center" Foreground="Gray" Content="不建议太高，容易导致程序崩溃，只对网易云音乐有效"/>
             </WrapPanel>
             <WrapPanel Margin="0 10 0 0" HorizontalAlignment="Center">
                 <Label Content="下载品质" HorizontalAlignment="Left" Height="25"  VerticalAlignment="Top"/>
