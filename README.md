@@ -30,4 +30,4 @@ WPF+C# 编写的音乐下载器<br>
 * [jsososo/QQMusicApi](https://github.com/jsososo/QQMusicApi)
 
 ## License
-[MIT](https://github.com/NiTian1207/Music-Downloader-New-UI/blob/master/LICENSE)
+[GPL-3.0](https://github.com/NiTian1207/Music-Downloader-New-UI/blob/master/LICENSE)
