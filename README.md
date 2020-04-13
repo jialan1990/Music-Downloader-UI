@@ -2,6 +2,9 @@
 WPF+C# 编写的音乐下载器<br>
 [博客文章](https://www.nitian1207.cn/archives/496)
 
+## 运行截图
+![界面](https://www.nitian1207.cn/wp-content/uploads/2020/04/mdui.png)
+
 ## 二次开发注意事项
 本项目所需接口需要自行搭建，具体信息参考下文 "使用的开源项目"<br>
 接口链接添加在 `MusicDownloader.Library.Music` 的 `NeteaseApiUrl` 和 `QQApiUrl`
